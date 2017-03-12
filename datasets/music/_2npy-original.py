@@ -23,7 +23,7 @@ def __fixed_shuffle(inp_list):
     # destructive operations; in place; no need to return
     raise ValueError("inp_list is neither a list nor a numpy.ndarray but a "+type(inp_list))
 
-data_path = os.path.abspath('./parts')
+data_path = os.path.abspath('./download/parts')
 print data_path
 
 paths = sorted(glob.glob(data_path+"/*.flac"))
