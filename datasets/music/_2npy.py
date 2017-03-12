@@ -31,6 +31,8 @@ __fixed_shuffle(paths)
 
 arr = [(scikits.audiolab.flacread(p)[0]).astype('float16') for p in paths]
 np_arr = np.array(arr)
+
+# BETHOVEEN MUSIC DATA SET SPLIT
 np.save('all_music.npy', np_arr)
 np.save('music_train.npy', np_arr[:-2*256])
 np.save('music_valid.npy', np_arr[-2*256:-256])

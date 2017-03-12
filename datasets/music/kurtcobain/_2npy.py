@@ -31,7 +31,18 @@ __fixed_shuffle(paths)
 
 arr = [(scikits.audiolab.flacread(p)[0]).astype('float16') for p in paths]
 np_arr = np.array(arr)
+""" BETHOVEEN MUSIC SPLIT
 np.save('all_music.npy', np_arr)
 np.save('music_train.npy', np_arr[:-2*256])
 np.save('music_valid.npy', np_arr[-2*256:-256])
 np.save('music_test.npy', np_arr[-256:])
+"""
+# 88/6/6 split
+length = len(np_arr)
+train_size = int(np.floor(length * .88)) # train
+test_size = int(np.floor(length * .06)) # test
+
+np.save('all_kurt.npy', np_arr)
+np.save('kurt_train.npy', np_arr[:train_size])
+np.save('kurt_valid.npy', np_arr[train_size:train_size + test_size])
+np.save('kurt_test.npy', np_arr[train_size + test_size:])
