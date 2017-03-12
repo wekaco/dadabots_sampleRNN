@@ -114,7 +114,7 @@ def get_args():
     parser.add_argument('--which_set', help='ONOM, BLIZZ, MUSIC, HENDRIX, COBAIN or HUCK',
             choices=['ONOM', 'BLIZZ', 'MUSIC', 'HENDRIX', 'COBAIN', 'HUCK'], required=True)
     parser.add_argument('--batch_size', help='size of mini-batch',
-            type=check_positive, choices=[64, 128, 256], required=True)
+           type=check_positive, choices=xrange(1,10000), required=True)
 
     parser.add_argument('--debug', help='Debug mode', required=False, default=False, action='store_true')
     parser.add_argument('--resume', help='Resume the same model from the last\
