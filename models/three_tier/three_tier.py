@@ -111,8 +111,8 @@ def get_args():
     parser.add_argument('--q_type', help='Quantization in linear-scale, a-law-companding,\
             or mu-law compandig. With mu-/a-law quantization level shoud be set as 256',\
             choices=['linear', 'a-law', 'mu-law'], required=True)
-    parser.add_argument('--which_set', help='ONOM, BLIZZ, MUSIC, or HUCK',
-            choices=['ONOM', 'BLIZZ', 'MUSIC', 'HUCK'], required=True)
+    parser.add_argument('--which_set', help='ONOM, BLIZZ, MUSIC, HENDRIX, COBAIN or HUCK',
+            choices=['ONOM', 'BLIZZ', 'MUSIC', 'HENDRIX', 'COBAIN', 'HUCK'], required=True)
     parser.add_argument('--batch_size', help='size of mini-batch',
             type=check_positive, choices=[64, 128, 256], required=True)
 
@@ -237,6 +237,14 @@ elif WHICH_SET == 'MUSIC':
     from datasets.dataset import music_train_feed_epoch as train_feeder
     from datasets.dataset import music_valid_feed_epoch as valid_feeder
     from datasets.dataset import music_test_feed_epoch  as test_feeder
+elif WHICH_SET == 'HENDRIX':
+    from datasets.dataset import hendrix_train_feed_epoch as train_feeder
+    from datasets.dataset import hendrix_valid_feed_epoch as valid_feeder
+    from datasets.dataset import hendrix_test_feed_epoch as test_feeder
+elif WHICH_SET == 'COBAIN':
+    from datasets.dataset import cobain_train_feed_epoch as train_feeder
+    from datasets.dataset import cobain_valid_feed_epoch as valid_feeder
+    from datasets.dataset import cobain_test_feed_epoch as test_feeder
 elif WHICH_SET == 'HUCK':
     from datasets.dataset import huck_train_feed_epoch as train_feeder
     from datasets.dataset import huck_valid_feed_epoch as valid_feeder
