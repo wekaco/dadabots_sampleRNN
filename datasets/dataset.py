@@ -1,6 +1,5 @@
 """
 RNN Vocal Generation Model
-
 Blizzard, Music, and Huckleberry Finn data feeders.
 """
 
@@ -21,6 +20,8 @@ __base = [
 __blizz_file = 'Blizzard/Blizzard9k_{}.npy'  # in float16 8secs*16000samples/sec
 __music_file = 'music/music_{}.npy'  # in float16 8secs*16000samples/sec
 __huck_file = 'Huckleberry/Huckleberry_{}.npy'  # in float16 8secs*16000samples/sec
+__hendrix_file = "music/hendrix/music_{}.npy"   # in float16 8secs*16000samples/sec
+__cobain_file = "music/kurtcobain/music_{}.npy"   # in float16 8secs*16000samples/sec
 
 __blizz_train_mean_std = np.array([0.0008558356760380169,
                                    0.098437514304141299],
@@ -30,6 +31,7 @@ __music_train_mean_std = np.array([-2.7492260671334582e-05,
                                    dtype='float64')
 # TODO:
 #__huck_train_mean_std = ...
+#__hendrix_train_mean_std = ...
 
 __train = lambda s: s.format('train')
 __valid = lambda s: s.format('valid')
@@ -85,12 +87,10 @@ def linear2mu(x, mu=255):
     From Joao
     x should be normalized between -1 and 1
     Converts an array according to mu-law and discretizes it
-
     Note:
         mu2linear(linear2mu(x)) != x
         Because we are compressing to 8 bits here.
         They will sound pretty much the same, though.
-
     :usage:
         >>> bitrate, samples = scipy.io.wavfile.read('orig.wav')
         >>> norm = __normalize(samples)[None, :]  # It takes 2D as inp
@@ -108,7 +108,6 @@ def mu2linear(x, mu=255):
     """
     From Joao with modifications
     Converts an integer array from mu to linear
-
     For important notes and usage see: linear2mu
     """
     mu = float(mu)
@@ -173,12 +172,9 @@ def __blizz_feed_epoch(files,
     Generator that yields training inputs (subbatch, reset). `subbatch` contains
     quantized audio data; `reset` is a boolean indicating the start of a new
     sequence (i.e. you should reset h0 whenever `reset` is True).
-
     Feeds subsequences which overlap by a specified amount, so that the model
     can always have target for every input in a given subsequence.
-
     Assumes all flac files have the same length.
-
     returns: (subbatch, reset)
     subbatch.shape: (BATCH_SIZE, SEQ_LEN + OVERLAP)
     reset: True or False
@@ -241,12 +237,10 @@ def blizz_train_feed_epoch(*args):
         q_levels:
         q_zero:
         q_type: One the following 'linear', 'a-law', or 'mu-law'
-
     THE NEW SEG IS:
     20.48hrs 36*256
     3*256
     3*256
-
     :returns:
         A generator yielding (subbatch, reset, submask)
     """
@@ -294,12 +288,9 @@ def __music_feed_epoch(files,
     Generator that yields training inputs (subbatch, reset). `subbatch` contains
     quantized audio data; `reset` is a boolean indicating the start of a new
     sequence (i.e. you should reset h0 whenever `reset` is True).
-
     Feeds subsequences which overlap by a specified amount, so that the model
     can always have target for every input in a given subsequence.
-
     Assumes all flac files have the same length.
-
     returns: (subbatch, reset)
     subbatch.shape: (BATCH_SIZE, SEQ_LEN + OVERLAP)
     reset: True or False
@@ -362,17 +353,14 @@ def music_train_feed_epoch(*args):
         q_levels:
         q_zero:
         q_type: One the following 'linear', 'a-law', or 'mu-law'
-
     4,340 (9.65 hours) in total
     With batch_size = 128:
         4,224 (9.39 hours) in total
         3,712 (88%, 8.25 hours)for training set
         256 (6%, .57 hours) for validation set
         256 (6%, .57 hours) for test set
-
     Note:
         32 of Beethoven's piano sonatas available on archive.org (Public Domain)
-
     :returns:
         A generator yielding (subbatch, reset, submask)
     """
@@ -404,6 +392,104 @@ def music_test_feed_epoch(*args):
     files = numpy.load(data_path)
     generator = __music_feed_epoch(files, *args)
     return generator
+#HENDRIX    
+def hendrix_train_feed_epoch(*args):
+    """
+    :parameters:
+        batch_size: int
+        seq_len:
+        overlap:
+        q_levels:
+        q_zero:
+        q_type: One the following 'linear', 'a-law', or 'mu-law'
+    4,340 (9.65 hours) in total
+    With batch_size = 128:
+        4,224 (9.39 hours) in total
+        3,712 (88%, 8.25 hours)for training set
+        256 (6%, .57 hours) for validation set
+        256 (6%, .57 hours) for test set
+    Note:
+        32 of Beethoven's piano sonatas available on archive.org (Public Domain)
+    :returns:
+        A generator yielding (subbatch, reset, submask)
+    """
+    # Just check if valid/test sets are also available. If not, raise.
+    find_dataset(__valid(__hendrix_file))
+    find_dataset(__test(__hendrix_file))
+    # Load train set
+    data_path = find_dataset(__train(__hendrix_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+
+def hendrix_valid_feed_epoch(*args):
+    """
+    See:
+        music_train_feed_epoch
+    """
+    data_path = find_dataset(__valid(__hendrix_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+
+def hendrix_test_feed_epoch(*args):
+    """
+    See:
+        music_train_feed_epoch
+    """
+    data_path = find_dataset(__test(__hendrix_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+#COBAIN    
+def cobain_train_feed_epoch(*args):
+    """
+    :parameters:
+        batch_size: int
+        seq_len:
+        overlap:
+        q_levels:
+        q_zero:
+        q_type: One the following 'linear', 'a-law', or 'mu-law'
+    4,340 (9.65 hours) in total
+    With batch_size = 128:
+        4,224 (9.39 hours) in total
+        3,712 (88%, 8.25 hours)for training set
+        256 (6%, .57 hours) for validation set
+        256 (6%, .57 hours) for test set
+    Note:
+        32 of Beethoven's piano sonatas available on archive.org (Public Domain)
+    :returns:
+        A generator yielding (subbatch, reset, submask)
+    """
+    # Just check if valid/test sets are also available. If not, raise.
+    find_dataset(__valid(__cobain_file))
+    find_dataset(__test(__cobain_file))
+    # Load train set
+    data_path = find_dataset(__train(__cobain_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+
+def cobain_valid_feed_epoch(*args):
+    """
+    See:
+        music_train_feed_epoch
+    """
+    data_path = find_dataset(__valid(__cobain_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+
+def cobain_test_feed_epoch(*args):
+    """
+    See:
+        music_train_feed_epoch
+    """
+    data_path = find_dataset(__test(__cobain_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
 
 def __huck_feed_epoch(files,
                       batch_size,
@@ -419,12 +505,9 @@ def __huck_feed_epoch(files,
     Generator that yields training inputs (subbatch, reset). `subbatch` contains
     quantized audio data; `reset` is a boolean indicating the start of a new
     sequence (i.e. you should reset h0 whenever `reset` is True).
-
     Feeds subsequences which overlap by a specified amount, so that the model
     can always have target for every input in a given subsequence.
-
     Assumes all flac files have the same length.
-
     returns: (subbatch, reset)
     subbatch.shape: (BATCH_SIZE, SEQ_LEN + OVERLAP)
     reset: True or False
@@ -488,12 +571,10 @@ def huck_train_feed_epoch(*args):
         q_levels:
         q_zero:
         q_type: One the following 'linear', 'a-law', or 'mu-law'
-
     THE NEW SEG IS:
     20.48hrs 36*256
     3*256
     3*256
-
     :returns:
         A generator yielding (subbatch, reset, submask)
     """
