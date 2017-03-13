@@ -57,7 +57,7 @@ optional arguments:
                         law compandig. With mu-/a-law quantization level shoud
                         be set as 256
   --which_set {ONOM,BLIZZ,MUSIC}
-                        ONOM, BLIZZ, or MUSIC
+                        ONOM, BLIZZ, COBAIN, HENDRIX, MCRIDE, GLASS, TNGHT, TNGHT2 or MUSIC
   --batch_size {64,128,256}
                         size of mini-batch
   --debug               Debug mode

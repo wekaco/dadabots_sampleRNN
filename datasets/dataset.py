@@ -23,6 +23,9 @@ __huck_file = 'Huckleberry/Huckleberry_{}.npy'  # in float16 8secs*16000samples/
 __hendrix_file = "music/hendrix/hendrix_{}.npy"   # in float16 8secs*16000samples/sec
 __cobain_file = "music/kurtcobain/kurt_{}.npy"   # in float16 8secs*16000samples/sec
 __glass_file = "music/glass/glass_{}.npy"   # in float16 8secs*16000samples/sec
+__tnght_file = "music/tnght/tnght_{}.npy"
+__tnght2_file = "music/tnght2/tnght2_{}.npy"
+__mcride_file = "music/mcride/mcride_{}.npy"
 
 __blizz_train_mean_std = np.array([0.0008558356760380169,
                                    0.098437514304141299],
@@ -540,6 +543,153 @@ def glass_test_feed_epoch(*args):
     files = numpy.load(data_path)
     generator = __music_feed_epoch(files, *args)
     return generator
+
+#TNGHT  
+def tnght_train_feed_epoch(*args):
+    """
+    :parameters:
+        batch_size: int
+        seq_len:
+        overlap:
+        q_levels:
+        q_zero:
+        q_type: One the following 'linear', 'a-law', or 'mu-law'
+    4,340 (9.65 hours) in total
+    With batch_size = 128:
+        4,224 (9.39 hours) in total
+        3,712 (88%, 8.25 hours)for training set
+        256 (6%, .57 hours) for validation set
+        256 (6%, .57 hours) for test set
+    Note:
+        32 of Beethoven's piano sonatas available on archive.org (Public Domain)
+    :returns:
+        A generator yielding (subbatch, reset, submask)
+    """
+    # Just check if valid/test sets are also available. If not, raise.
+    find_dataset(__valid(__tnght_file))
+    find_dataset(__test(__tnght_file))
+    # Load train set
+    data_path = find_dataset(__train(__tnght_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+
+def tnght_valid_feed_epoch(*args):
+    """
+    See:
+        music_train_feed_epoch
+    """
+    data_path = find_dataset(__valid(__tnght_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+
+def tnght_test_feed_epoch(*args):
+    """
+    See:
+        music_train_feed_epoch
+    """
+    data_path = find_dataset(__test(__tnght_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+
+#TNGHT2
+def tnght2_train_feed_epoch(*args):
+    """
+    :parameters:
+        batch_size: int
+        seq_len:
+        overlap:
+        q_levels:
+        q_zero:
+        q_type: One the following 'linear', 'a-law', or 'mu-law'
+    4,340 (9.65 hours) in total
+    With batch_size = 128:
+        4,224 (9.39 hours) in total
+        3,712 (88%, 8.25 hours)for training set
+        256 (6%, .57 hours) for validation set
+        256 (6%, .57 hours) for test set
+    :returns:
+        A generator yielding (subbatch, reset, submask)
+    """
+    # Just check if valid/test sets are also available. If not, raise.
+    find_dataset(__valid(__tnght2_file))
+    find_dataset(__test(__tnght2_file))
+    # Load train set
+    data_path = find_dataset(__train(__tnght2_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+
+def tnght_valid_feed_epoch(*args):
+    """
+    See:
+        music_train_feed_epoch
+    """
+    data_path = find_dataset(__valid(__tnght2_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+
+def tnght2_test_feed_epoch(*args):
+    """
+    See:
+        music_train_feed_epoch
+    """
+    data_path = find_dataset(__test(__tnght2_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+
+#MC RIDE
+def mcride_train_feed_epoch(*args):
+    """
+    :parameters:
+        batch_size: int
+        seq_len:
+        overlap:
+        q_levels:
+        q_zero:
+        q_type: One the following 'linear', 'a-law', or 'mu-law'
+    4,340 (9.65 hours) in total
+    With batch_size = 128:
+        4,224 (9.39 hours) in total
+        3,712 (88%, 8.25 hours)for training set
+        256 (6%, .57 hours) for validation set
+        256 (6%, .57 hours) for test set
+    :returns:
+        A generator yielding (subbatch, reset, submask)
+    """
+    # Just check if valid/test sets are also available. If not, raise.
+    find_dataset(__valid(__mcride_file))
+    find_dataset(__test(__mcride_file))
+    # Load train set
+    data_path = find_dataset(__train(__mcride_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+
+def mcride_valid_feed_epoch(*args):
+    """
+    See:
+        music_train_feed_epoch
+    """
+    data_path = find_dataset(__valid(__mcride_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+
+def mcride_test_feed_epoch(*args):
+    """
+    See:
+        music_train_feed_epoch
+    """
+    data_path = find_dataset(__test(__mcride_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+
 def __huck_feed_epoch(files,
                       batch_size,
                       seq_len,
