@@ -1,15 +1,24 @@
 from time import time
 import scipy.io.wavfile
+import glob
+import sys
 
 BITRATE = 16000
 N_SEQS = 20  # Number of samples to generate every time monitoring.
-#args
-#Q_TYPE
-#N_RNN
-#DIM
-#FRAME_SIZE
+
 Q_ZERO = numpy.int32(Q_LEVELS//2) # Discrete value correponding to zero amplitude
 H0_MULT = 1
+RESULTS_DIR = 'results_2t'
+name = '*'sys.argv[1].'*/ars.pkl'
+with open(glob.glob(name)) as f:
+    params = f.readfile()
+    ###grab this stuff
+    #args
+    #Q_TYPE
+    #N_RNN
+    #DIM
+    #FRAME_SIZE
+FOLDER_PREFIX = os.path.join(RESULTS_DIR, tag)
 ### Create directories ###
 #   FOLDER_PREFIX: root, contains:
 #       log.txt, __note.txt, train_log.pkl, train_log.png [, model_settings.txt]
@@ -24,11 +33,8 @@ if not os.path.exists(PARAMS_PATH):
 SAMPLES_PATH = os.path.join(FOLDER_PREFIX, 'samples')
 if not os.path.exists(SAMPLES_PATH):
     os.makedirs(SAMPLES_PATH)
-BEST_PATH = os.path.join(FOLDER_PREFIX, 'best')
-if not os.path.exists(BEST_PATH):
-    os.makedirs(BEST_PATH)
 
-SAMPLES_PATH = os.path.join(FOLDER_PREFIX, 'samples')
+
 # Uniform [-0.5, 0.5) for half of initial state for generated samples
 # to study the behaviour of the model and also to introduce some diversity
 # to samples in a simple way. [it's disabled for now]
