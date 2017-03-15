@@ -28,6 +28,8 @@ __tnght2_file = "music/tnght2/tnght2_{}.npy"
 __mcride_file = "music/mcride/mcride_{}.npy"
 __girltalk_file = "music/girltalk/girltalk_{}.npy"
 __adele_file = "music/adele/adele_{}.npy"
+__brass_file = "music/brass/brass_{}.npy"
+__strings_file = "music/strings/strings_{}.npy"
 
 __blizz_train_mean_std = np.array([0.0008558356760380169,
                                    0.098437514304141299],
@@ -740,6 +742,101 @@ def adele_test_feed_epoch(*args):
     generator = __music_feed_epoch(files, *args)
     return generator
 
+#brass
+def brass_train_feed_epoch(*args):
+    """
+    :parameters:
+        batch_size: int
+        seq_len:
+        overlap:
+        q_levels:
+        q_zero:
+        q_type: One the following 'linear', 'a-law', or 'mu-law'
+    4,340 (9.65 hours) in total
+    With batch_size = 128:
+        4,224 (9.39 hours) in total
+        3,712 (88%, 8.25 hours)for training set
+        256 (6%, .57 hours) for validation set
+        256 (6%, .57 hours) for test set
+    :returns:
+        A generator yielding (subbatch, reset, submask)
+    """
+    # Just check if valid/test sets are also available. If not, raise.
+    find_dataset(__valid(__brass_file))
+    find_dataset(__test(__brass_file))
+    # Load train set
+    data_path = find_dataset(__train(__brass_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+
+def brass_valid_feed_epoch(*args):
+    """
+    See:
+        music_train_feed_epoch
+    """
+    data_path = find_dataset(__valid(__brass_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+
+def brass_test_feed_epoch(*args):
+    """
+    See:
+        music_train_feed_epoch
+    """
+    data_path = find_dataset(__test(__brass_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+
+#stringss
+def strings_train_feed_epoch(*args):
+    """
+    :parameters:
+        batch_size: int
+        seq_len:
+        overlap:
+        q_levels:
+        q_zero:
+        q_type: One the following 'linear', 'a-law', or 'mu-law'
+    4,340 (9.65 hours) in total
+    With batch_size = 128:
+        4,224 (9.39 hours) in total
+        3,712 (88%, 8.25 hours)for training set
+        256 (6%, .57 hours) for validation set
+        256 (6%, .57 hours) for test set
+    :returns:
+        A generator yielding (subbatch, reset, submask)
+    """
+    # Just check if valid/test sets are also available. If not, raise.
+    find_dataset(__valid(__strings_file))
+    find_dataset(__test(__strings_file))
+    # Load train set
+    data_path = find_dataset(__train(__strings_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+
+def strings_valid_feed_epoch(*args):
+    """
+    See:
+        music_train_feed_epoch
+    """
+    data_path = find_dataset(__valid(__strings_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+
+def strings_test_feed_epoch(*args):
+    """
+    See:
+        music_train_feed_epoch
+    """
+    data_path = find_dataset(__test(__strings_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
 
 def __huck_feed_epoch(files,
                       batch_size,
