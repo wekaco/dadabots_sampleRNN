@@ -111,8 +111,8 @@ def get_args():
     parser.add_argument('--q_type', help='Quantization in linear-scale, a-law-companding,\
             or mu-law compandig. With mu-/a-law quantization level shoud be set as 256',\
             choices=['linear', 'a-law', 'mu-law'], required=True)
-    parser.add_argument('--which_set', help='ONOM, BLIZZ, MUSIC, HUCK, HENDRIX, GLASS, TNGHT, TNGHT2, MCRIDE, GIRLTALK or COBAIN' ,
-            choices=['ONOM', 'BLIZZ', 'HENDRIX', 'MUSIC', 'COBAIN', 'GLASS', 'TNGHT', 'TNGHT2', 'MCRIDE', 'GIRLTALK', 'HUCK'], required=True)
+    parser.add_argument('--which_set', help='ONOM, BLIZZ, MUSIC, HUCK, HENDRIX, GLASS, TNGHT, TNGHT2, MCRIDE, GIRLTALK, ADELE or COBAIN' ,
+            choices=['ONOM', 'BLIZZ', 'HENDRIX', 'MUSIC', 'COBAIN', 'GLASS', 'TNGHT', 'TNGHT2', 'MCRIDE', 'GIRLTALK', 'ADELE', 'HUCK'], required=True)
     parser.add_argument('--batch_size', help='size of mini-batch',
            type=check_positive, choices=xrange(1,10000), required=True)
 
@@ -269,6 +269,10 @@ elif WHICH_SET == 'HUCK':
     from datasets.dataset import huck_train_feed_epoch as train_feeder
     from datasets.dataset import huck_valid_feed_epoch as valid_feeder
     from datasets.dataset import huck_test_feed_epoch  as test_feeder
+elif WHICH_SET == 'ADELE':
+    from datasets.dataset import adele_train_feed_epoch as train_feeder
+    from datasets.dataset import adele_valid_feed_epoch as valid_feeder
+    from datasets.dataset import adele_test_feed_epoch as test_feeder
 
 def load_data(data_feeder):
     """
