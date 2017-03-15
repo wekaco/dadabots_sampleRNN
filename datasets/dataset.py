@@ -26,6 +26,7 @@ __glass_file = "music/glass/glass_{}.npy"   # in float16 8secs*16000samples/sec
 __tnght_file = "music/tnght/tnght_{}.npy"
 __tnght2_file = "music/tnght2/tnght2_{}.npy"
 __mcride_file = "music/mcride/mcride_{}.npy"
+__girltalk_file = "music/girltalk/girltalk_{}.npy"
 
 __blizz_train_mean_std = np.array([0.0008558356760380169,
                                    0.098437514304141299],
@@ -643,7 +644,7 @@ def tnght2_test_feed_epoch(*args):
     return generator
 
 #MC RIDE
-def mcride_train_feed_epoch(*args):
+def girltalk_train_feed_epoch(*args):
     """
     :parameters:
         batch_size: int
@@ -662,33 +663,35 @@ def mcride_train_feed_epoch(*args):
         A generator yielding (subbatch, reset, submask)
     """
     # Just check if valid/test sets are also available. If not, raise.
-    find_dataset(__valid(__mcride_file))
-    find_dataset(__test(__mcride_file))
+    find_dataset(__valid(__girltalk_file))
+    find_dataset(__test(__girltalk_file))
     # Load train set
-    data_path = find_dataset(__train(__mcride_file))
+    data_path = find_dataset(__train(__girltalk_file))
     files = numpy.load(data_path)
     generator = __music_feed_epoch(files, *args)
     return generator
 
-def mcride_valid_feed_epoch(*args):
+def girltalk_valid_feed_epoch(*args):
     """
     See:
         music_train_feed_epoch
     """
-    data_path = find_dataset(__valid(__mcride_file))
+    data_path = find_dataset(__valid(__girltalk_file))
     files = numpy.load(data_path)
     generator = __music_feed_epoch(files, *args)
     return generator
 
-def mcride_test_feed_epoch(*args):
+def girltalk_test_feed_epoch(*args):
     """
     See:
         music_train_feed_epoch
     """
-    data_path = find_dataset(__test(__mcride_file))
+    data_path = find_dataset(__test(__girltalk_file))
     files = numpy.load(data_path)
     generator = __music_feed_epoch(files, *args)
     return generator
+
+
 
 def __huck_feed_epoch(files,
                       batch_size,
