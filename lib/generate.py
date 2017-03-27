@@ -1,3 +1,4 @@
+import os
 from time import time
 import scipy.io.wavfile
 import glob
@@ -5,10 +6,25 @@ import sys
 import numpy
 import pickle
 
-name = glob.glob("../results*/" + sys.argv[1] + "/args.pkl")[0]
+tag = sys.argv[1]
+name = glob.glob("../results*/" + tag + "/args.pkl")[0]
 params = pickle.load(open(name, "r"))
-print pickle
-exit()
+print params
+info = {}
+for p in xrange(1,len(params),2):
+    info[params[p][2:]] = params[p+1]
+print info
+#exit()
+
+Q_TYPE = info["q_type"]
+Q_LEVELS = int(info["q_levels"])
+N_RNN = int(info["n_rnn"])
+DIM = int(info["dim"])
+FRAME_SIZE = int(info["frame_size"])
+
+
+#{'dim': '1024', 'q_type': 'linear', 'learn_h0': 'True', 'weight_norm': 'True', 'q_levels': '256', 'skip_conn': 'False', 'batch_size': '128', 'n_frames': '64', 'emb_size': '256', 'exp': 'KURT2x4', 'frame_size': '16', 'which_set': 'KURT', 'rnn_type': 'GRU', 'n_rnn': '4'}
+
 ###grab this stuff
 #args
 #Q_TYPE
@@ -21,25 +37,19 @@ BITRATE = 16000
 N_SEQS = 20  # Number of samples to generate every time monitoring.
 Q_ZERO = numpy.int32(Q_LEVELS//2) # Discrete value correponding to zero amplitude
 H0_MULT = 1
+
 RESULTS_DIR = 'results_2t'
+RESULTS_DIR = name.split("/")[1]
+print RESULTS_DIR
 
 FOLDER_PREFIX = os.path.join(RESULTS_DIR, tag)
 ### Create directories ###
 #   FOLDER_PREFIX: root, contains:
 #       log.txt, __note.txt, train_log.pkl, train_log.png [, model_settings.txt]
-#   FOLDER_PREFIX/params: saves all checkpoint params as pkl
 #   FOLDER_PREFIX/samples: keeps all checkpoint samples as wav
-#   FOLDER_PREFIX/best: keeps the best parameters, samples, ...
-if not os.path.exists(FOLDER_PREFIX):
-    os.makedirs(FOLDER_PREFIX)
-PARAMS_PATH = os.path.join(FOLDER_PREFIX, 'params')
-if not os.path.exists(PARAMS_PATH):
-    os.makedirs(PARAMS_PATH)
 SAMPLES_PATH = os.path.join(FOLDER_PREFIX, 'samples')
-if not os.path.exists(SAMPLES_PATH):
-    os.makedirs(SAMPLES_PATH)
 
-
+print SAMPLES_PATH
 # Uniform [-0.5, 0.5) for half of initial state for generated samples
 # to study the behaviour of the model and also to introduce some diversity
 # to samples in a simple way. [it's disabled for now]
