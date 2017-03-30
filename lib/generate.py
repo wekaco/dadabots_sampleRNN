@@ -5,6 +5,8 @@ import glob
 import sys
 import numpy
 import pickle
+import theano
+import theano.tensor as T
 
 tag = sys.argv[1]
 name = glob.glob("../results*/" + tag + "/args.pkl")[0]
@@ -12,7 +14,8 @@ params = pickle.load(open(name, "r"))
 print params
 info = {}
 for p in xrange(1,len(params),2):
-    info[params[p][2:]] = params[p+1]
+    if p+1 < len(params):
+        info[params[p][2:]] = params[p+1]
 print info
 #exit()
 
@@ -53,11 +56,21 @@ print SAMPLES_PATH
 # Uniform [-0.5, 0.5) for half of initial state for generated samples
 # to study the behaviour of the model and also to introduce some diversity
 # to samples in a simple way. [it's disabled for now]
+sequences = T.imatrix('sequences')
+h0        = T.tensor3('h0')
+reset     = T.iscalar('reset')
+mask      = T.matrix('mask')
 fixed_rand_h0 = numpy.random.rand(N_SEQS//2, N_RNN, H0_MULT*DIM)
 fixed_rand_h0 -= 0.5
 fixed_rand_h0 = fixed_rand_h0.astype('float32')
 
-def generate_and_save_samples(tag):
+def generate_and_save_samples():
+    # Sampling at frame level
+    frame_level_generate_fn = theano.function(
+        [sequences, h0, reset],
+        frame_level_rnn(sequences, h0, reset),
+        on_unused_input='warn'
+    )
     def write_audio_file(name, data):
         data = data.astype('float32')
         data -= data.min()
@@ -113,3 +126,5 @@ def generate_and_save_samples(tag):
         elif Q_TYPE == 'a-law':
             raise NotImplementedError('a-law is not implemented')
         write_audio_file("sample_{}_{}".format(tag, i), samp)
+
+generate_and_save_samples()
