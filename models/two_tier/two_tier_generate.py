@@ -125,9 +125,9 @@ def get_args():
     # NEW
     # Create tag for this experiment based on passed args
     tag = reduce(lambda a, b: a+b, sys.argv).replace('--resume', '').replace('/', '-').replace('--', '-').replace('True', 'T').replace('False', 'F')
-    #tag = re.sub(r'-n_secs[0-9]+', "", tag)
-    #tag = re.sub(r'-n_seqs[0-9]+', "", tag)
-    #tag = re.sub(r'_generate', "", tag)
+    tag = re.sub(r'-n_secs[0-9]+', "", tag)
+    tag = re.sub(r'-n_seqs[0-9]+', "", tag)
+    tag = re.sub(r'_generate', "", tag)
     tag += '-lr'+str(LEARNING_RATE)
     print "Created experiment tag for these args:"
     print tag
@@ -534,7 +534,7 @@ fixed_rand_h0 = numpy.random.rand(N_SEQS//2, N_RNN, H0_MULT*DIM)
 fixed_rand_h0 -= 0.5
 fixed_rand_h0 = fixed_rand_h0.astype('float32')
 
-def generate_and_save_samples(tag, N_SECS=180):
+def generate_and_save_samples(tag, N_SECS=5):
     def write_audio_file(name, data):
         data = data.astype('float32')
         data -= data.min()
