@@ -30,6 +30,10 @@ __girltalk_file = "music/girltalk/girltalk_{}.npy"
 __adele_file = "music/adele/adele_{}.npy"
 __brass_file = "music/brass/brass_{}.npy"
 __strings_file = "music/strings/strings_{}.npy"
+__b_snare_file = "percussion/snare/b-partsdrums_{}.npy"
+__f_snare_file = "percussion/snare/f-partsdrums_{}.npy"
+__br_snare_file = "percussion/snare/br-partsdrums_{}.npy"
+__fr_snare_file = "percussion/snare/fr-partsdrums_{}.npy"
 
 __blizz_train_mean_std = np.array([0.0008558356760380169,
                                    0.098437514304141299],
@@ -837,7 +841,194 @@ def strings_test_feed_epoch(*args):
     files = numpy.load(data_path)
     generator = __music_feed_epoch(files, *args)
     return generator
+#b_snare
+def b_snare_train_feed_epoch(*args):
+    """
+    :parameters:
+        batch_size: int
+        seq_len:
+        overlap:
+        q_levels:
+        q_zero:
+        q_type: One the following 'linear', 'a-law', or 'mu-law'
+    4,340 (9.65 hours) in total
+    With batch_size = 128:
+        4,224 (9.39 hours) in total
+        3,712 (88%, 8.25 hours)for training set
+        256 (6%, .57 hours) for validation set
+        256 (6%, .57 hours) for test set
+    :returns:
+        A generator yielding (subbatch, reset, submask)
+    """
+    # Just check if valid/test sets are also available. If not, raise.
+    find_dataset(__valid(__b_snare_file))
+    find_dataset(__test(__b_snare_file))
+    # Load train set
+    data_path = find_dataset(__train(__b_snare_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
 
+def b_snare_valid_feed_epoch(*args):
+    """
+    See:
+        music_train_feed_epoch
+    """
+    data_path = find_dataset(__valid(__b_snare_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+
+def b_snare_test_feed_epoch(*args):
+    """
+    See:
+        music_train_feed_epoch
+    """
+    data_path = find_dataset(__test(__b_snare_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+#f_snare
+def f_snare_train_feed_epoch(*args):
+    """
+    :parameters:
+        batch_size: int
+        seq_len:
+        overlap:
+        q_levels:
+        q_zero:
+        q_type: One the following 'linear', 'a-law', or 'mu-law'
+    4,340 (9.65 hours) in total
+    With batch_size = 128:
+        4,224 (9.39 hours) in total
+        3,712 (88%, 8.25 hours)for training set
+        256 (6%, .57 hours) for validation set
+        256 (6%, .57 hours) for test set
+    :returns:
+        A generator yielding (subbatch, reset, submask)
+    """
+    # Just check if valid/test sets are also available. If not, raise.
+    find_dataset(__valid(__f_snare_file))
+    find_dataset(__test(__f_snare_file))
+    # Load train set
+    data_path = find_dataset(__train(__f_snare_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+
+def f_snare_valid_feed_epoch(*args):
+    """
+    See:
+        music_train_feed_epoch
+    """
+    data_path = find_dataset(__valid(__f_snare_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+
+def f_snare_test_feed_epoch(*args):
+    """
+    See:
+        music_train_feed_epoch
+    """
+    data_path = find_dataset(__test(__f_snare_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+#br_snare
+def br_snare_train_feed_epoch(*args):
+    """
+    :parameters:
+        batch_size: int
+        seq_len:
+        overlap:
+        q_levels:
+        q_zero:
+        q_type: One the following 'linear', 'a-law', or 'mu-law'
+    4,340 (9.65 hours) in total
+    With batch_size = 128:
+        4,224 (9.39 hours) in total
+        3,712 (88%, 8.25 hours)for training set
+        256 (6%, .57 hours) for validation set
+        256 (6%, .57 hours) for test set
+    :returns:
+        A generator yielding (subbatch, reset, submask)
+    """
+    # Just check if valid/test sets are also available. If not, raise.
+    find_dataset(__valid(__br_snare_file))
+    find_dataset(__test(__br_snare_file))
+    # Load train set
+    data_path = find_dataset(__train(__br_snare_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+
+def br_snare_valid_feed_epoch(*args):
+    """
+    See:
+        music_train_feed_epoch
+    """
+    data_path = find_dataset(__valid(__br_snare_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+
+def br_snare_test_feed_epoch(*args):
+    """
+    See:
+        music_train_feed_epoch
+    """
+    data_path = find_dataset(__test(__br_snare_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+#fr_snare
+def fr_snare_train_feed_epoch(*args):
+    """
+    :parameters:
+        batch_size: int
+        seq_len:
+        overlap:
+        q_levels:
+        q_zero:
+        q_type: One the following 'linear', 'a-law', or 'mu-law'
+    4,340 (9.65 hours) in total
+    With batch_size = 128:
+        4,224 (9.39 hours) in total
+        3,712 (88%, 8.25 hours)for training set
+        256 (6%, .57 hours) for validation set
+        256 (6%, .57 hours) for test set
+    :returns:
+        A generator yielding (subbatch, reset, submask)
+    """
+    # Just check if valid/test sets are also available. If not, raise.
+    find_dataset(__valid(__fr_snare_file))
+    find_dataset(__test(__fr_snare_file))
+    # Load train set
+    data_path = find_dataset(__train(__fr_snare_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+
+def fr_snare_valid_feed_epoch(*args):
+    """
+    See:
+        music_train_feed_epoch
+    """
+    data_path = find_dataset(__valid(__fr_snare_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
+
+def fr_snare_test_feed_epoch(*args):
+    """
+    See:
+        music_train_feed_epoch
+    """
+    data_path = find_dataset(__test(__fr_snare_file))
+    files = numpy.load(data_path)
+    generator = __music_feed_epoch(files, *args)
+    return generator
 def __huck_feed_epoch(files,
                       batch_size,
                       seq_len,
