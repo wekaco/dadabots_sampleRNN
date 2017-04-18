@@ -35,6 +35,7 @@ __f_bass_file = "percussion/bass/f-partsdrums_{}.npy"
 __br_bass_file = "percussion/bass/br-partsdrums_{}.npy"
 __fr_bass_file = "percussion/bass/fr-partsdrums_{}.npy"
 __geo_file = "music/geo/geo_{}.npy"
+__pjazz_file = "music/p_jazz/pjazz_{}.npy"
 
 __blizz_train_mean_std = np.array([0.0008558356760380169,
                                    0.098437514304141299],
@@ -44,7 +45,6 @@ __music_train_mean_std = np.array([-2.7492260671334582e-05,
                                    dtype='float64')
 # TODO:
 #__huck_train_mean_std = ...
-#__hendrix_train_mean_std = ...
 
 __train = lambda s: s.format('train')
 __valid = lambda s: s.format('valid')
@@ -1031,8 +1031,8 @@ def fr_bass_test_feed_epoch(*args):
     generator = __music_feed_epoch(files, *args)
     return generator
 
-#geo
-def geo_train_feed_epoch(*args):
+#pjazz
+def pjazz_train_feed_epoch(*args):
     """
     :parameters:
         batch_size: int
@@ -1051,30 +1051,30 @@ def geo_train_feed_epoch(*args):
         A generator yielding (subbatch, reset, submask)
     """
     # Just check if valid/test sets are also available. If not, raise.
-    find_dataset(__valid(__geo_file))
-    find_dataset(__test(__geo_file))
+    find_dataset(__valid(__pjazz_file))
+    find_dataset(__test(__pjazz_file))
     # Load train set
-    data_path = find_dataset(__train(__geo_file))
+    data_path = find_dataset(__train(__pjazz_file))
     files = numpy.load(data_path)
     generator = __music_feed_epoch(files, *args)
     return generator
 
-def geo_valid_feed_epoch(*args):
+def pjazz_valid_feed_epoch(*args):
     """
     See:
         music_train_feed_epoch
     """
-    data_path = find_dataset(__valid(__geo_file))
+    data_path = find_dataset(__valid(__pjazz_file))
     files = numpy.load(data_path)
     generator = __music_feed_epoch(files, *args)
     return generator
 
-def geo_test_feed_epoch(*args):
+def pjazz_test_feed_epoch(*args):
     """
     See:
         music_train_feed_epoch
     """
-    data_path = find_dataset(__test(__geo_file))
+    data_path = find_dataset(__test(__pjazz_file))
     files = numpy.load(data_path)
     generator = __music_feed_epoch(files, *args)
     return generator

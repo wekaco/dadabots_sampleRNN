@@ -102,8 +102,8 @@ def get_args():
             type=check_positive, required=True)
     parser.add_argument('--q_type', help='Quantization in linear-scale, a-law-companding, or mu-law compandig. With mu-/a-law quantization level shoud be set as 256',\
             choices=['linear', 'a-law', 'mu-law'], required=True)
-    parser.add_argument('--which_set', help='ONOM, BLIZZ, MUSIC, HENDRIX, GLASS, TNGHT, TNGHT2, MCRIDE, GIRLTALK, ADELE, BRASS, STRINGS, GEO, Fbass, FRbass, Bbass, BRbass, or COBAIN' ,
-            choices=['ONOM', 'BLIZZ', 'HENDRIX', 'MUSIC', 'COBAIN', 'GLASS', 'TNGHT', 'TNGHT2', 'MCRIDE', 'ADELE', 'GIRLTALK', 'BRASS', 'STRINGS', 'Fbass', 'Bbass', 'FRbass', 'BRbass', 'GEO'], required=True)
+    parser.add_argument('--which_set', help='ONOM, BLIZZ, MUSIC, HENDRIX, GLASS, TNGHT, TNGHT2, MCRIDE, GIRLTALK, ADELE, BRASS, STRINGS, GEO, Fbass, FRbass, Bbass, BRbass, PJAZZ, or COBAIN' ,
+            choices=['ONOM', 'BLIZZ', 'HENDRIX', 'MUSIC', 'COBAIN', 'GLASS', 'TNGHT', 'TNGHT2', 'MCRIDE', 'ADELE', 'GIRLTALK', 'BRASS', 'STRINGS', 'Fbass', 'Bbass', 'FRbass', 'BRbass', 'GEO', 'PJAZZ'], required=True)
     parser.add_argument('--batch_size', help='size of mini-batch',
            type=check_positive, choices=xrange(1,10000), required=True)
 
@@ -279,6 +279,10 @@ elif WHICH_SET == 'GEO':
     from datasets.dataset import geo_train_feed_epoch as train_feeder
     from datasets.dataset import geo_valid_feed_epoch as valid_feeder
     from datasets.dataset import geo_test_feed_epoch as test_feeder
+elif WHICH_SET == 'PJAZZ':
+    from datasets.dataset import pjazz_train_feed_epoch as train_feeder
+    from datasets.dataset import pjazz_valid_feed_epoch as valid_feeder
+    from datasets.dataset import pjazz_test_feed_epoch as test_feeder
 
 def load_data(data_feeder):
     """
