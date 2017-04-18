@@ -102,8 +102,8 @@ def get_args():
             type=check_positive, required=True)
     parser.add_argument('--q_type', help='Quantization in linear-scale, a-law-companding, or mu-law compandig. With mu-/a-law quantization level shoud be set as 256',\
             choices=['linear', 'a-law', 'mu-law'], required=True)
-    parser.add_argument('--which_set', help='ONOM, BLIZZ, MUSIC, HENDRIX, GLASS, TNGHT, TNGHT2, MCRIDE, GIRLTALK, ADELE, BRASS, STRINGS, or COBAIN' ,
-            choices=['ONOM', 'BLIZZ', 'HENDRIX', 'MUSIC', 'COBAIN', 'GLASS', 'TNGHT', 'TNGHT2', 'MCRIDE', 'ADELE', 'GIRLTALK', 'BRASS', 'STRINGS', 'FSNARE', 'BSNARE', 'FRSNARE', 'BRSNARE'], required=True)
+    parser.add_argument('--which_set', help='ONOM, BLIZZ, MUSIC, HENDRIX, GLASS, TNGHT, TNGHT2, MCRIDE, GIRLTALK, ADELE, BRASS, STRINGS, GEO, Fbass, FRbass, Bbass, BRbass, or COBAIN' ,
+            choices=['ONOM', 'BLIZZ', 'HENDRIX', 'MUSIC', 'COBAIN', 'GLASS', 'TNGHT', 'TNGHT2', 'MCRIDE', 'ADELE', 'GIRLTALK', 'BRASS', 'STRINGS', 'Fbass', 'Bbass', 'FRbass', 'BRbass', 'GEO'], required=True)
     parser.add_argument('--batch_size', help='size of mini-batch',
            type=check_positive, choices=xrange(1,10000), required=True)
 
@@ -259,22 +259,26 @@ elif WHICH_SET == 'STRINGS':
     from datasets.dataset import strings_train_feed_epoch as train_feeder
     from datasets.dataset import strings_valid_feed_epoch as valid_feeder
     from datasets.dataset import strings_test_feed_epoch as test_feeder
-elif WHICH_SET == 'FSNARE':
-    from datasets.dataset import f_snare_train_feed_epoch as train_feeder
-    from datasets.dataset import f_snare_valid_feed_epoch as valid_feeder
-    from datasets.dataset import f_snare_test_feed_epoch as test_feeder
-elif WHICH_SET == 'BSNARE':
-    from datasets.dataset import b_snare_train_feed_epoch as train_feeder
-    from datasets.dataset import b_snare_valid_feed_epoch as valid_feeder
-    from datasets.dataset import b_snare_test_feed_epoch as test_feeder
-elif WHICH_SET == 'FRSNARE':
-    from datasets.dataset import fr_snare_train_feed_epoch as train_feeder
-    from datasets.dataset import fr_snare_valid_feed_epoch as valid_feeder
-    from datasets.dataset import fr_snare_test_feed_epoch as test_feeder
-elif WHICH_SET == 'BRSNARE':
-    from datasets.dataset import br_snare_train_feed_epoch as train_feeder
-    from datasets.dataset import br_snare_valid_feed_epoch as valid_feeder
-    from datasets.dataset import br_snare_test_feed_epoch as test_feeder
+elif WHICH_SET == 'Fbass':
+    from datasets.dataset import f_bass_train_feed_epoch as train_feeder
+    from datasets.dataset import f_bass_valid_feed_epoch as valid_feeder
+    from datasets.dataset import f_bass_test_feed_epoch as test_feeder
+elif WHICH_SET == 'Bbass':
+    from datasets.dataset import b_bass_train_feed_epoch as train_feeder
+    from datasets.dataset import b_bass_valid_feed_epoch as valid_feeder
+    from datasets.dataset import b_bass_test_feed_epoch as test_feeder
+elif WHICH_SET == 'FRbass':
+    from datasets.dataset import fr_bass_train_feed_epoch as train_feeder
+    from datasets.dataset import fr_bass_valid_feed_epoch as valid_feeder
+    from datasets.dataset import fr_bass_test_feed_epoch as test_feeder
+elif WHICH_SET == 'BRbass':
+    from datasets.dataset import br_bass_train_feed_epoch as train_feeder
+    from datasets.dataset import br_bass_valid_feed_epoch as valid_feeder
+    from datasets.dataset import br_bass_test_feed_epoch as test_feeder
+elif WHICH_SET == 'GEO':
+    from datasets.dataset import geo_train_feed_epoch as train_feeder
+    from datasets.dataset import geo_valid_feed_epoch as valid_feeder
+    from datasets.dataset import geo_test_feed_epoch as test_feeder
 
 def load_data(data_feeder):
     """
