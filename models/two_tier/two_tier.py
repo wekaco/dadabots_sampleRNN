@@ -102,8 +102,8 @@ def get_args():
             type=check_positive, required=True)
     parser.add_argument('--q_type', help='Quantization in linear-scale, a-law-companding, or mu-law compandig. With mu-/a-law quantization level shoud be set as 256',\
             choices=['linear', 'a-law', 'mu-law'], required=True)
-    parser.add_argument('--which_set', help='ONOM, BLIZZ, MUSIC, HENDRIX, GLASS, TNGHT, TNGHT2, MCRIDE, GIRLTALK, ADELE, BRASS, STRINGS, GEO, Fbass, FRbass, Bbass, BRbass, PJAZZ, or COBAIN' ,
-            choices=['ONOM', 'BLIZZ', 'HENDRIX', 'MUSIC', 'COBAIN', 'GLASS', 'TNGHT', 'TNGHT2', 'MCRIDE', 'ADELE', 'GIRLTALK', 'BRASS', 'STRINGS', 'Fbass', 'Bbass', 'FRbass', 'BRbass', 'GEO', 'PJAZZ'], required=True)
+    parser.add_argument('--which_set', help='the directory name of the dataset' ,
+            type=string, required=True)
     parser.add_argument('--batch_size', help='size of mini-batch',
            type=check_positive, choices=xrange(1,10000), required=True)
 
@@ -207,89 +207,16 @@ lib.print_model_settings(locals(), path=FOLDER_PREFIX, sys_arg=True)
 
 ### Import the data_feeder ###
 # Handling WHICH_SET
-if WHICH_SET == 'ONOM':
-    from datasets.dataset import onom_train_feed_epoch as train_feeder
-    from datasets.dataset import onom_valid_feed_epoch as valid_feeder
-    from datasets.dataset import onom_test_feed_epoch  as test_feeder
-elif WHICH_SET == 'BLIZZ':
-    from datasets.dataset import blizz_train_feed_epoch as train_feeder
-    from datasets.dataset import blizz_valid_feed_epoch as valid_feeder
-    from datasets.dataset import blizz_test_feed_epoch  as test_feeder
-elif WHICH_SET == 'MUSIC':
-    from datasets.dataset import music_train_feed_epoch as train_feeder
-    from datasets.dataset import music_valid_feed_epoch as valid_feeder
-    from datasets.dataset import music_test_feed_epoch  as test_feeder
-elif WHICH_SET == 'HENDRIX':
-    from datasets.dataset import hendrix_train_feed_epoch as train_feeder
-    from datasets.dataset import hendrix_valid_feed_epoch as valid_feeder
-    from datasets.dataset import hendrix_test_feed_epoch as test_feeder
-elif WHICH_SET == 'COBAIN':
-    from datasets.dataset import cobain_train_feed_epoch as train_feeder
-    from datasets.dataset import cobain_valid_feed_epoch as valid_feeder
-    from datasets.dataset import cobain_test_feed_epoch as test_feeder
-elif WHICH_SET == 'GLASS':
-    from datasets.dataset import glass_train_feed_epoch as train_feeder
-    from datasets.dataset import glass_valid_feed_epoch as valid_feeder
-    from datasets.dataset import glass_test_feed_epoch as test_feeder
-elif WHICH_SET == 'TNGHT':
-    from datasets.dataset import tnght_train_feed_epoch as train_feeder
-    from datasets.dataset import tnght_valid_feed_epoch as valid_feeder
-    from datasets.dataset import tnght_test_feed_epoch as test_feeder
-elif WHICH_SET == 'TNGHT2':
-    from datasets.dataset import tnght2_train_feed_epoch as train_feeder
-    from datasets.dataset import tnght2_valid_feed_epoch as valid_feeder
-    from datasets.dataset import tnght2_test_feed_epoch as test_feeder
-elif WHICH_SET == 'MCRIDE':
-    from datasets.dataset import mcride_train_feed_epoch as train_feeder
-    from datasets.dataset import mcride_valid_feed_epoch as valid_feeder
-    from datasets.dataset import mcride_test_feed_epoch as test_feeder
-elif WHICH_SET == 'GIRLTALK':
-    from datasets.dataset import girltalk_train_feed_epoch as train_feeder
-    from datasets.dataset import girltalk_valid_feed_epoch as valid_feeder
-    from datasets.dataset import girltalk_test_feed_epoch as test_feeder
-elif WHICH_SET == 'ADELE':
-    from datasets.dataset import adele_train_feed_epoch as train_feeder
-    from datasets.dataset import adele_valid_feed_epoch as valid_feeder
-    from datasets.dataset import adele_test_feed_epoch as test_feeder
-elif WHICH_SET == 'BRASS':
-    from datasets.dataset import brass_train_feed_epoch as train_feeder
-    from datasets.dataset import brass_valid_feed_epoch as valid_feeder
-    from datasets.dataset import brass_test_feed_epoch as test_feeder
-elif WHICH_SET == 'STRINGS':
-    from datasets.dataset import strings_train_feed_epoch as train_feeder
-    from datasets.dataset import strings_valid_feed_epoch as valid_feeder
-    from datasets.dataset import strings_test_feed_epoch as test_feeder
-elif WHICH_SET == 'Fbass':
-    from datasets.dataset import f_bass_train_feed_epoch as train_feeder
-    from datasets.dataset import f_bass_valid_feed_epoch as valid_feeder
-    from datasets.dataset import f_bass_test_feed_epoch as test_feeder
-elif WHICH_SET == 'Bbass':
-    from datasets.dataset import b_bass_train_feed_epoch as train_feeder
-    from datasets.dataset import b_bass_valid_feed_epoch as valid_feeder
-    from datasets.dataset import b_bass_test_feed_epoch as test_feeder
-elif WHICH_SET == 'FRbass':
-    from datasets.dataset import fr_bass_train_feed_epoch as train_feeder
-    from datasets.dataset import fr_bass_valid_feed_epoch as valid_feeder
-    from datasets.dataset import fr_bass_test_feed_epoch as test_feeder
-elif WHICH_SET == 'BRbass':
-    from datasets.dataset import br_bass_train_feed_epoch as train_feeder
-    from datasets.dataset import br_bass_valid_feed_epoch as valid_feeder
-    from datasets.dataset import br_bass_test_feed_epoch as test_feeder
-elif WHICH_SET == 'GEO':
-    from datasets.dataset import geo_train_feed_epoch as train_feeder
-    from datasets.dataset import geo_valid_feed_epoch as valid_feeder
-    from datasets.dataset import geo_test_feed_epoch as test_feeder
-elif WHICH_SET == 'PJAZZ':
-    from datasets.dataset import pjazz_train_feed_epoch as train_feeder
-    from datasets.dataset import pjazz_valid_feed_epoch as valid_feeder
-    from datasets.dataset import pjazz_test_feed_epoch as test_feeder
+from datasets.dataset import music_train_feed_epoch as train_feeder
+from datasets.dataset import music_valid_feed_epoch as valid_feeder
+from datasets.dataset import music_test_feed_epoch  as test_feeder
 
 def load_data(data_feeder):
     """
     Helper function to deal with interface of different datasets.
     `data_feeder` should be `train_feeder`, `valid_feeder`, or `test_feeder`.
     """
-    return data_feeder(BATCH_SIZE,
+    return data_feeder(dname=WHICH_SET, BATCH_SIZE,
                        SEQ_LEN,
                        OVERLAP,
                        Q_LEVELS,
