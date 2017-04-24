@@ -3,20 +3,23 @@ import sys, os, subprocess, scikits.audiolab, random, time, glob
 
 #store dataset name
 DATASET_NAME = str(sys.argv[1])
-#create the dirctories
+#create the 
+print "creating directory for", DATASET_NAME
 os.makedirs(DATASET_NAME)
 #move samples from directory to use dataset name
-types = {'wav', 'WAV', "mp3"}
+print "moving samples"
+types = {'wav', "mp3"}
 for t in types:
     os.system('mv ./downloads/*.{} ./{}/'.format(t, DATASET_NAME))
 #run proprocess
+print "preprocessing"
 OUTPUT_DIR=os.path.join(DATASET_NAME, "parts")
 os.makedirs(OUTPUT_DIR)
 # Step 1: write all filenames to a list
 with open(os.path.join(OUTPUT_DIR, 'preprocess_file_list.txt'), 'w') as f:
     for dirpath, dirnames, filenames in os.walk(DATASET_NAME):
         for filename in filenames:
-            if filename.endswith(".wav"):
+            if filename.endswith(".wav") || filename.endswith("mp3"):
                 f.write("file '" + dirpath + '/'+ filename + "'\n")
 
 # Step 2: concatenate everything into one massive wav file
