@@ -19,7 +19,7 @@ os.makedirs(OUTPUT_DIR)
 with open(os.path.join(OUTPUT_DIR, 'preprocess_file_list.txt'), 'w') as f:
     for dirpath, dirnames, filenames in os.walk(DATASET_NAME):
         for filename in filenames:
-            if filename.endswith(".wav") || filename.endswith("mp3"):
+            if filename.endswith(".wav") or filename.endswith("mp3"):
                 f.write("file '" + dirpath + '/'+ filename + "'\n")
 
 # Step 2: concatenate everything into one massive wav file
