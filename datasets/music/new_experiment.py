@@ -16,7 +16,7 @@ print "preprocessing"
 OUTPUT_DIR=os.path.join(DATASET_NAME, "parts")
 os.makedirs(OUTPUT_DIR)
 # Step 1: write all filenames to a list
-with open(os.path.join(OUTPUT_DIR, 'preprocess_file_list.txt'), 'w') as f:
+with open(os.path.join('/preprocess_file_list.txt'), 'w') as f:
     for dirpath, dirnames, filenames in os.walk(DATASET_NAME):
         for filename in filenames:
             if filename.endswith(".wav") or filename.endswith("mp3"):
@@ -24,7 +24,7 @@ with open(os.path.join(OUTPUT_DIR, 'preprocess_file_list.txt'), 'w') as f:
 
 # Step 2: concatenate everything into one massive wav file
 print "concatenate all files"
-os.system("ffmpeg -f concat -safe 0 -i {}/preprocess_file_list.txt {}/preprocess_all_audio.wav".format(OUTPUT_DIR, OUTPUT_DIR))
+os.system("ffmpeg -f concat -safe 0 -i /preprocess_file_list.txt {}/preprocess_all_audio.wav".format(OUTPUT_DIR))
 audio = "preprocess_all_audio.wav"
 print "get length"
 # # get the length of the resulting file
