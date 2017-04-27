@@ -38,8 +38,17 @@ length = float(subprocess.check_output('ffprobe -i {}/{} -show_entries format=du
 print length, "DURATION"
 print "print big file into chunks"
 # # Step 3: split the big file into 8-second chunks
-for i in xrange((int(length)//8 - 1)/3):
-    os.system('ffmpeg -ss {} -t 8 -i {}/{} -ac 1 -ab 16k -ar 16000 {}/p{}.flac'.format(i, OUTPUT_DIR, audio, OUTPUT_DIR, i))
+# overlapping 3 times per 8 seconds
+'''
+for i in xrange(int((length//8)*3)-1):
+    time = (i * 8 )/ 3
+    os.system('ffmpeg -ss {} -t 8 -i {}/preprocess_all_audio.wav -ac 1 -ab 16k -ar 16000 {}/p{}.flac'.format(time, OUTPUT_DIR, OUTPUT_DIR, i))
+'''
+size = 8
+num = 3200
+for i in xrange(0, num):
+    time = i * ((length-size)/float(num))
+    os.system('ffmpeg -ss {} -t 8 -i {}/preprocess_all_audio.wav -ac 1 -ab 16k -ar 16000 {}/p{}.flac'.format(time, OUTPUT_DIR, OUTPUT_DIR, i))
 print "clean up"
 # # Step 4: clean up temp files
 os.system('rm {}/preprocess_all_audio.wav'.format(OUTPUT_DIR))
