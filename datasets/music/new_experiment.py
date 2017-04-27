@@ -5,6 +5,7 @@ PWD = os.path.basename(os.getcwd())
 print 'PWD is', PWD
 #store dataset name
 DATASET_NAME = str(sys.argv[1])
+DOWNLOAD_DIR = str(sys.argv[2])
 #create the 
 print "creating directory for", DATASET_NAME
 os.makedirs(DATASET_NAME)
@@ -12,7 +13,7 @@ os.makedirs(DATASET_NAME)
 print "moving samples"
 types = {'wav', "mp3"}
 for t in types:
-    os.system('mv ./downloads/*.{} ./{}/'.format(t, DATASET_NAME))
+    os.system('mv {}/*.{} ./{}/'.format(t, DATASET_NAME))
 #run proprocess
 print "preprocessing"
 OUTPUT_DIR=os.path.join(DATASET_NAME, "parts")
