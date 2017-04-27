@@ -1,7 +1,7 @@
 import numpy as np
 import sys, os, subprocess, scikits.audiolab, random, time, glob
 
-PWD = os.path.basename(os.getcwd())
+PWD = os.getcwd()
 print 'PWD is', PWD
 #store dataset name
 DATASET_NAME = str(sys.argv[1])
