@@ -14,14 +14,14 @@ os.makedirs(DATASET_DIR)
 print "moving samples"
 types = {'wav', "mp3"}
 for t in types:
-    os.system('mv {}/*.{} ./{}/'.format(DOWNLOAD_DIR, t, DATASET_NAME))
+    os.system('mv {}/*.{} ./{}/'.format(DOWNLOAD_DIR, t, DATASET_DIR))
 #run proprocess
 print "preprocessing"
 OUTPUT_DIR=os.path.join(DATASET_DIR, "parts")
 os.makedirs(OUTPUT_DIR)
 # Step 1: write all filenames to a list
-with open(os.path.join(PWD, 'preprocess_file_list.txt'), 'w') as f:
-    for dirpath, dirnames, filenames in os.walk(DATASET_NAME):
+with open(os.path.join(DATASET_DIR, 'preprocess_file_list.txt'), 'w') as f:
+    for dirpath, dirnames, filenames in os.walk(DATASET_DIR):
         for filename in filenames:
             if filename.endswith(".wav") or filename.endswith("mp3"):
                 f.write("file '" + dirpath + '/'+ filename + "'\n")
@@ -29,7 +29,7 @@ with open(os.path.join(PWD, 'preprocess_file_list.txt'), 'w') as f:
 # Step 2: concatenate everything into one massive wav file
 print "concatenate all files"
 os.system('pwd')
-os.system("ffmpeg -f concat -safe 0 -i {}/preprocess_file_list.txt {}/preprocess_all_audio.wav".format(PWD, OUTPUT_DIR))
+os.system("ffmpeg -f concat -safe 0 -i {}/preprocess_file_list.txt {}/preprocess_all_audio.wav".format(DATASET_DIR, OUTPUT_DIR))
 audio = "preprocess_all_audio.wav"
 print "get length"
 # # get the length of the resulting file
@@ -42,7 +42,7 @@ for i in xrange((int(length)//8 - 1)/3):
 print "clean up"
 # # Step 4: clean up temp files
 os.system('rm {}/preprocess_all_audio.wav'.format(OUTPUT_DIR))
-os.system('rm {}/preprocess_file_list.txt'.format(PWD))
+os.system('rm {}/preprocess_file_list.txt'.format(DATASET_DIR))
 print 'save as .npy'
 __RAND_SEED = 123
 def __fixed_shuffle(inp_list):
