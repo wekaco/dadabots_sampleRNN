@@ -6,6 +6,7 @@ print 'PWD is', PWD
 #store dataset name
 DATASET_NAME = str(sys.argv[1])
 DOWNLOAD_DIR = str(sys.argv[2])
+print 'dl_dir is set to', DOWNLOAD_DIR
 #create the 
 print "creating directory for", DATASET_NAME
 DATASET_DIR = os.path.join(PWD, DATASET_NAME)
