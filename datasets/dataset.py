@@ -28,7 +28,7 @@ def find_dataset(filename):
 ### Basic utils ###
 def __round_to(x, y):
     """round x up to the nearest y"""
-    return int(numpy.ceil(x / float(y))) * y
+    return int(np.ceil(x / float(y))) * y
 
 def __normalize(data):
     """To range [0., 1.]"""
@@ -42,13 +42,13 @@ def __linear_quantize(data, q_levels):
     scales normalized across axis 1
     """
     # Normalization is on mini-batch not whole file
-    #eps = numpy.float64(1e-5)
+    #eps = np.float64(1e-5)
     #data -= data.min(axis=1)[:, None]
     #data *= ((q_levels - eps) / data.max(axis=1)[:, None])
     #data += eps/2
     #data = data.astype('int32')
 
-    eps = numpy.float64(1e-5)
+    eps = np.float64(1e-5)
     data *= (q_levels - eps)
     data += eps/2
     data = data.astype('int32')
@@ -121,12 +121,12 @@ def __fixed_shuffle(inp_list):
         return
     #import collections
     #if isinstance(inp_list, (collections.Sequence)):
-    if isinstance(inp_list, numpy.ndarray):
-        numpy.random.seed(__RAND_SEED)
-        numpy.random.shuffle(inp_list)
+    if isinstance(inp_list, np.ndarray):
+        np.random.seed(__RAND_SEED)
+        np.random.shuffle(inp_list)
         return
     # destructive operations; in place; no need to return
-    raise ValueError("inp_list is neither a list nor a numpy.ndarray but a "+type(inp_list))
+    raise ValueError("inp_list is neither a list nor a np.ndarray but a "+type(inp_list))
 
 def __make_random_batches(inp_list, batch_size):
     batches = []
@@ -166,12 +166,12 @@ def __music_feed_epoch(files,
         batch_seq_len = len(bch[0])  # should be 8*16000
         batch_seq_len = __round_to(batch_seq_len, seq_len)
 
-        batch = numpy.zeros(
+        batch = np.zeros(
             (batch_size, batch_seq_len),
             dtype='float64'
         )
 
-        mask = numpy.ones(batch.shape, dtype='float32')
+        mask = np.ones(batch.shape, dtype='float32')
 
         for i, data in enumerate(bch):
             #data, fs, enc = scikits.audiolab.flacread(path)
@@ -179,30 +179,30 @@ def __music_feed_epoch(files,
             batch[i, :len(data)] = data
             # This shouldn't change anything. All the flac files for Music
             # are the same length and the mask should be 1 every where.
-            # mask[i, len(data):] = numpy.float32(0)
+            # mask[i, len(data):] = np.float32(0)
 
         if not real_valued:
             batch = __batch_quantize(batch, q_levels, q_type)
 
-            batch = numpy.concatenate([
-                numpy.full((batch_size, overlap), q_zero, dtype='int32'),
+            batch = np.concatenate([
+                np.full((batch_size, overlap), q_zero, dtype='int32'),
                 batch
             ], axis=1)
         else:
             batch -= __music_train_mean_std[0]
             batch /= __music_train_mean_std[1]
-            batch = numpy.concatenate([
-                numpy.full((batch_size, overlap), 0, dtype='float32'),
+            batch = np.concatenate([
+                np.full((batch_size, overlap), 0, dtype='float32'),
                 batch
             ], axis=1).astype('float32')
 
-        mask = numpy.concatenate([
-            numpy.full((batch_size, overlap), 1, dtype='float32'),
+        mask = np.concatenate([
+            np.full((batch_size, overlap), 1, dtype='float32'),
             mask
         ], axis=1)
 
         for i in xrange(batch_seq_len // seq_len):
-            reset = numpy.int32(i==0)
+            reset = np.int32(i==0)
             subbatch = batch[:, i*seq_len : (i+1)*seq_len + overlap]
             submask = mask[:, i*seq_len : (i+1)*seq_len + overlap]
             yield (subbatch, reset, submask)
@@ -232,7 +232,7 @@ def music_train_feed_epoch(d_name, *args):
     find_dataset(__test(__getFile(d_name)))
     # Load train set
     data_path = find_dataset(__train(__getFile(d_name)))
-    files = numpy.load(data_path)
+    files = np.load(data_path)
     generator = __music_feed_epoch(files, *args)
     return generator
 
@@ -242,7 +242,7 @@ def music_valid_feed_epoch(d_name, *args):
         music_train_feed_epoch
     """
     data_path = find_dataset(__valid(getFile(d_name)))
-    files = numpy.load(data_path)
+    files = np.load(data_path)
     generator = __music_feed_epoch(files, *args)
     return generator
 
@@ -252,6 +252,6 @@ def music_test_feed_epoch(d_name, *args):
         music_train_feed_epoch
     """
     data_path = find_dataset(__test(getFile(d_name)))
-    files = numpy.load(data_path)
+    files = np.load(data_path)
     generator = __music_feed_epoch(files, *args)
     return generator
