@@ -216,7 +216,7 @@ def load_data(data_feeder):
     Helper function to deal with interface of different datasets.
     `data_feeder` should be `train_feeder`, `valid_feeder`, or `test_feeder`.
     """
-    return data_feeder(dname=WHICH_SET, BATCH_SIZE,
+    return data_feeder(WHICH_SET, BATCH_SIZE,
                        SEQ_LEN,
                        OVERLAP,
                        Q_LEVELS,

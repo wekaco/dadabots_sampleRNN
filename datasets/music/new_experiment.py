@@ -1,6 +1,8 @@
 import numpy as np
 import sys, os, subprocess, scikits.audiolab, random, time, glob
 
+PWD = os.path.basename(os.getcwd())
+print 'PWD is', PWD
 #store dataset name
 DATASET_NAME = str(sys.argv[1])
 #create the 
@@ -15,8 +17,9 @@ for t in types:
 print "preprocessing"
 OUTPUT_DIR=os.path.join(DATASET_NAME, "parts")
 os.makedirs(OUTPUT_DIR)
+print os.path.join(PWD, '/preprocess_file_list.txt')
 # Step 1: write all filenames to a list
-with open(os.path.join('/preprocess_file_list.txt'), 'w') as f:
+with open(os.path.join(PWD, '/preprocess_file_list.txt'), 'w') as f:
     for dirpath, dirnames, filenames in os.walk(DATASET_NAME):
         for filename in filenames:
             if filename.endswith(".wav") or filename.endswith("mp3"):
@@ -24,6 +27,7 @@ with open(os.path.join('/preprocess_file_list.txt'), 'w') as f:
 
 # Step 2: concatenate everything into one massive wav file
 print "concatenate all files"
+os.system('pwd')
 os.system("ffmpeg -f concat -safe 0 -i /preprocess_file_list.txt {}/preprocess_all_audio.wav".format(OUTPUT_DIR))
 audio = "preprocess_all_audio.wav"
 print "get length"
