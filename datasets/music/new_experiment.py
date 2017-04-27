@@ -15,7 +15,7 @@ os.makedirs(DATASET_DIR)
 print "moving samples"
 types = {'wav', "mp3"}
 for t in types:
-    os.system('mv {}/*.{} ./{}/'.format(DOWNLOAD_DIR, t, DATASET_DIR))
+    os.system('mv {}/*.{} {}/'.format(DOWNLOAD_DIR, t, DATASET_DIR))
 #run proprocess
 print "preprocessing"
 OUTPUT_DIR=os.path.join(DATASET_DIR, "parts")
