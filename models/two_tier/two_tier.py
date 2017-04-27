@@ -103,7 +103,7 @@ def get_args():
     parser.add_argument('--q_type', help='Quantization in linear-scale, a-law-companding, or mu-law compandig. With mu-/a-law quantization level shoud be set as 256',\
             choices=['linear', 'a-law', 'mu-law'], required=True)
     parser.add_argument('--which_set', help='the directory name of the dataset' ,
-            type=string, required=True)
+            type=str, required=True)
     parser.add_argument('--batch_size', help='size of mini-batch',
            type=check_positive, choices=xrange(1,10000), required=True)
 
