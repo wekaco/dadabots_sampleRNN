@@ -241,7 +241,7 @@ def music_valid_feed_epoch(d_name, *args):
     See:
         music_train_feed_epoch
     """
-    data_path = find_dataset(__valid(getFile(d_name)))
+    data_path = find_dataset(__valid(__getFile(d_name)))
     files = np.load(data_path)
     generator = __music_feed_epoch(files, *args)
     return generator
@@ -251,7 +251,7 @@ def music_test_feed_epoch(d_name, *args):
     See:
         music_train_feed_epoch
     """
-    data_path = find_dataset(__test(getFile(d_name)))
+    data_path = find_dataset(__test(__getFile(d_name)))
     files = np.load(data_path)
     generator = __music_feed_epoch(files, *args)
     return generator
