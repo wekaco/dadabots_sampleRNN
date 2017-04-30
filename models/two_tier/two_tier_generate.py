@@ -104,8 +104,8 @@ def get_args():
             type=check_positive, required=True)
     parser.add_argument('--q_type', help='Quantization in linear-scale, a-law-companding, or mu-law compandig. With mu-/a-law quantization level shoud be set as 256',\
             choices=['linear', 'a-law', 'mu-law'], required=True)
-    parser.add_argument('--which_set', help='ONOM, BLIZZ, MUSIC, HENDRIX, GLASS, TNGHT, TNGHT2, MCRIDE, GIRLTALK, ADELE, BRASS, STRINGS, GEO, Fbass, FRbass, Bbass, BRbass, PJAZZ, or COBAIN' ,
-            choices=['ONOM', 'BLIZZ', 'HENDRIX', 'MUSIC', 'COBAIN', 'GLASS', 'TNGHT', 'TNGHT2', 'MCRIDE', 'ADELE', 'GIRLTALK', 'BRASS', 'STRINGS', 'Fbass', 'Bbass', 'FRbass', 'BRbass', 'GEO', 'PJAZZ'], required=True)
+    parser.add_argument('--which_set', help='the directory name of the dataset' ,
+            type=str, required=True)
     parser.add_argument('--batch_size', help='size of mini-batch',
             type=check_positive, choices=xrange(0, 129), required=True)
 
@@ -310,7 +310,7 @@ def load_data(data_feeder):
     Helper function to deal with interface of different datasets.
     `data_feeder` should be `train_feeder`, `valid_feeder`, or `test_feeder`.
     """
-    return data_feeder(BATCH_SIZE,
+    return data_feeder(WHICH_SET, BATCH_SIZE,
                        SEQ_LEN,
                        OVERLAP,
                        Q_LEVELS,
