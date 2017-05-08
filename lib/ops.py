@@ -270,7 +270,7 @@ def softmax_and_sample(logits):
         srng.multinomial(pvals=T.nnet.softmax(flattened_logits)),
         theano.config.floatX
     ).reshape(old_shape)
-    return  srng.choice(replace=False, p=samples)
+    return  srng.choice(replace=False, p=samples).flatten(2)
 
 # TODO: Have a look at this benchmark:
 #       https://github.com/MaximumEntropy/cudnn_rnn_theano_benchmarks
