@@ -803,7 +803,7 @@ def stackedLSTM(
     :usage:
         >>> TODO
     """
-    assert n_rnn in xrange(1, 6), "n_rnn should be in [1,2,3,4,5]"
+    assert n_rnn in xrange(1, 40), "n_rnn should be in 1-40"
     assert not(n_rnn == 1 and skip_conn == True),\
             "Single layer RNN cannot have skip connections"
 
