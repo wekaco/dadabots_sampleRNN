@@ -93,7 +93,7 @@ def get_args():
     parser.add_argument('--dim', help='Dimension of RNN and MLPs',\
             type=check_positive, required=True)
     parser.add_argument('--n_rnn', help='Number of layers in the stacked RNN',
-            type=check_positive, choices=xrange(1,6), required=True)
+            type=check_positive, choices=xrange(1,40), required=True)
     parser.add_argument('--rnn_type', help='GRU or LSTM', choices=['LSTM', 'GRU'],\
             required=True)
     parser.add_argument('--learn_h0', help='Whether to learn the initial state of RNN',\
