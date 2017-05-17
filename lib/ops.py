@@ -808,17 +808,17 @@ def stackedLSTM(
             "Single layer RNN cannot have skip connections"
 
     # 1st layer LSTM
-    lstm1_inp = inputs
-    lstm1_inp_dim = input_dim
-    lstm1 = LowMemLSTM(name+'1',
-                       lstm1_inp_dim,
+    lstm_inp = inputs
+    lstm_inp_dim = input_dim
+    lstm = LowMemLSTM(name+'1',
+                       lstm_inp_dim,
                        hidden_dim,
-                       lstm1_inp,
+                       lstm_inp,
                        h0=h0[:, 0],
                        weightnorm=weightnorm)
 
     if not skip_conn:
-        out = lstm1[:, :, :hidden_dim]
+        out = lstm[:, :, :hidden_dim]
     else:
         # Just note that a single layer RNN doesn't have skip connections.
         # If you reach here, it means it's more than 1 layer and with enabled
@@ -828,121 +828,46 @@ def stackedLSTM(
         out = Linear(name+'1.outskip1y',
                      hidden_dim,
                      hidden_dim,
-                     lstm1[:, :, :hidden_dim],
+                     lstm[:, :, :hidden_dim],
                      biases=True,
                      initialization='he',
                      weightnorm=weightnorm)
-    last_hiddens = [lstm1[:, -1]]
+    last_hiddens = [lstm[:, -1]]
 
     extra_name = '+inpskip' if skip_conn else ''
 
     # 2nd layer RNN
-    if n_rnn > 1:
+    n = 2 # starting to build from the second rnn layer
+    while n <= n_rnn:
+        del lstm_inp, lstm_inp_dim
         if not skip_conn:
-            lstm2_inp = lstm1[:, :, :hidden_dim]
-            lstm2_inp_dim = hidden_dim
+            lstm_inp = lstm[:, :, :hidden_dim]
+            lstm_inp_dim = hidden_dim
         else:
             # TODO: Find out why concatenate did not worked here for two inputs
             # of (False, False, False) broadcastable. concatenate([gru1,
             # inputs], axis=2).broadcastable is (False, False, False, False)???
-            lstm2_inp = T.concatenate([lstm1[:, :, :hidden_dim], inputs], axis=-1) # axis 2
-            lstm2_inp_dim = hidden_dim + input_dim
-        lstm2 = LowMemLSTM(name+'2'+extra_name,
-                           lstm2_inp_dim,
+            lstm_inp = T.concatenate([lstm[:, :, :hidden_dim], inputs], axis=-1) # axis 2
+            lstm_inp_dim = hidden_dim + input_dim
+        del lstm
+        lstm = LowMemLSTM(name+str(n)+extra_name,
+                           lstm_inp_dim,
                            hidden_dim,
-                           lstm2_inp,
-                           h0=h0[:, 1],
+                           lstm_inp,
+                           h0=h0[:, n-1],
                            weightnorm=weightnorm)
         if not skip_conn:
-            out = lstm2[:, :, :hidden_dim]
+            out = lstm[:, :, :hidden_dim]
         else:
-            out += Linear(name+'2.outskip2y',
+            out += Linear(name+str(n)+'.outskip'+str(n)+'y',
                           hidden_dim,
                           hidden_dim,
-                          lstm2[:, :, :hidden_dim],
+                          lstm[:, :, :hidden_dim],
                           biases=False,
                           initialization='he',
                           weightnorm=weightnorm)
-        last_hiddens.append(lstm2[:, -1])
-
-    # 3rd layer RNN
-    if n_rnn > 2:
-        if not skip_conn:
-            lstm3_inp = lstm2[:, :, :hidden_dim]
-            lstm3_inp_dim = hidden_dim
-        else:
-            lstm3_inp = T.concatenate([lstm2[:, :, :hidden_dim], inputs], axis=-1) # axis 2
-            lstm3_inp_dim = hidden_dim + input_dim
-        lstm3 = LowMemLSTM(name+'3'+extra_name,
-                           lstm3_inp_dim,
-                           hidden_dim,
-                           lstm3_inp,
-                           h0=h0[:, 2],
-                           weightnorm=weightnorm)
-        if not skip_conn:
-            out = lstm3[:, :, :hidden_dim]
-        else:
-            out += Linear(name+'3.outskip3y',
-                          hidden_dim,
-                          hidden_dim,
-                          lstm3[:, :, :hidden_dim],
-                          biases=False,
-                          initialization='he',
-                          weightnorm=weightnorm)
-        last_hiddens.append(lstm3[:, -1])
-
-    # 4th layer RNN
-    if n_rnn > 3:
-        if not skip_conn:
-            lstm4_inp = lstm3[:, :, :hidden_dim]
-            lstm4_inp_dim = hidden_dim
-        else:
-            lstm4_inp = T.concatenate([lstm3[:, :, :hidden_dim], inputs], axis=-1) # axis 2
-            lstm4_inp_dim = hidden_dim + input_dim
-        lstm4 = LowMemLSTM(name+'4'+extra_name,
-                           lstm4_inp_dim,
-                           hidden_dim,
-                           lstm4_inp,
-                           h0=h0[:, 3],
-                           weightnorm=weightnorm)
-        if not skip_conn:
-            out = lstm4[:, :, :hidden_dim]
-        else:
-            out += Linear(name+'4.outskip4y',
-                          hidden_dim,
-                          hidden_dim,
-                          lstm4[:, :, :hidden_dim],
-                          biases=False,
-                          initialization='he',
-                          weightnorm=weightnorm)
-        last_hiddens.append(lstm4[:, -1])
-
-    # 5th layer RNN
-    if n_rnn > 4:
-        if not skip_conn:
-            lstm5_inp = lstm4[:, :, :hidden_dim]
-            lstm5_inp_dim = hidden_dim
-        else:
-            lstm5_inp = T.concatenate([lstm4[:, :, :hidden_dim], inputs], axis=-1) # axis 2
-            lstm5_inp_dim = hidden_dim + input_dim
-        lstm5 = LowMemLSTM(name+'5'+extra_name,
-                           lstm5_inp_dim,
-                           hidden_dim,
-                           lstm5_inp,
-                           h0=h0[:, 4],
-                           weightnorm=weightnorm)
-        if not skip_conn:
-            out = lstm5[:, :, :hidden_dim]
-        else:
-            out += Linear(name+'5.outskip5y',
-                          hidden_dim,
-                          hidden_dim,
-                          lstm5[:, :, :hidden_dim],
-                          biases=False,
-                          initialization='he',
-                          weightnorm=weightnorm)
-        last_hiddens.append(lstm5[:, -1])
-
+        last_hiddens.append(lstm[:, -1])
+        n += 1
     last_hiddens = T.stack(last_hiddens, axis=1)
     return out, last_hiddens
 
