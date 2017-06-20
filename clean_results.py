@@ -7,7 +7,7 @@ def get_subdirectories(a_dir):
             if os.path.isdir(os.path.join(a_dir, name))]
 experiments = get_subdirectories(results_dir)
 num_epochs = 5
-hit_list = ["params_e"+str(n) for n in xrange(num_epochs)]
+hit_list = ["params_e"+str(n)+"_" for n in xrange(num_epochs)]
 unused_files = []
 for e in experiments:
     e_dir = os.path.join(results_dir, e)
