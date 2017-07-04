@@ -48,7 +48,7 @@ size = 8
 num = 3200
 for i in xrange(0, num):
     time = i * ((length-size)/float(num))
-    os.system('ffmpeg -ss {} -t 8 -i {}/preprocess_all_audio.wav -ac 1 -ab 16k -ar 16000 {}/p{}.flac'.format(time, OUTPUT_DIR, OUTPUT_DIR, i))
+    os.system('ffmpeg -ss {} -t 8 -i {}/preprocess_all_audio.wav -ac 1 -ab 16k -ar 32000 {}/p{}.flac'.format(time, OUTPUT_DIR, OUTPUT_DIR, i))
 print "clean up"
 # # Step 4: clean up temp files
 os.system('rm {}/preprocess_all_audio.wav'.format(OUTPUT_DIR))
