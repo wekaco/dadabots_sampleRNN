@@ -1,5 +1,14 @@
-# SampleRNN
+# ZVK's SampleRNN
+
 Code accompanying the paper [SampleRNN: An Unconditional End-to-End Neural Audio Generation Model](https://openreview.net/forum?id=SkxKPDv5xl). Samples are available [here](https://soundcloud.com/samplernn/sets).
+
+## Improvements made to the the ZVK fork:
+
+- auto-preprocessing (audio conversion, concatenation, chunking, and saving .npy files)
+- scripts for differnet sample rates are available (16k, 32k)
+- any processed datasets can be loaded into the two-tier network via arguments
+- sampling is picked from distribution (not max)
+- any number of RNN layers is now possible (until you run out of memory)
 
 ## Dependencies
 - cuDNN 5105
@@ -26,11 +35,11 @@ To train a model on an existing dataset with accelerated GPU processing, you nee
 Mission control center:
 ```
 $ pwd
-/u/mehris/sampleRNN_ICLR2017
+/root/zvk/sampleRNN_ICLR2017
 ```
 ### SampleRNN (2-tier)
 ```
-$ python models/two_tier/two_tier.py -h
+$ python models/two_tier/two_tier32k.py -h
 usage: two_tier.py [-h] [--exp EXP] --n_frames N_FRAMES --frame_size
                    FRAME_SIZE --weight_norm WEIGHT_NORM --emb_size EMB_SIZE
                    --skip_conn SKIP_CONN --dim DIM --n_rnn {1,2,3,4,5}
@@ -55,7 +64,8 @@ optional arguments:
   --skip_conn SKIP_CONN
                         Add skip connections to RNN
   --dim DIM             Dimension of RNN and MLPs
-  --n_rnn {1,2,3,4,5}   Number of layers in the stacked RNN
+  --n_rnn {1,2,3,4,5,6,7,8,9,10,11,12,n,...}
+					 	Number of layers in the stacked RNN
   --rnn_type {LSTM,GRU}
                         GRU or LSTM
   --learn_h0 LEARN_H0   Whether to learn the initial state of RNN
@@ -75,7 +85,7 @@ optional arguments:
 ```
 To run:
 ```
-$ THEANO_FLAGS=mode=FAST_RUN,device=gpu0,floatX=float32 python -u models/two_tier/two_tier.py --exp BEST_2TIER --n_frames 64 --frame_size 16 --emb_size 256 --skip_conn False --dim 1024 --n_rnn 3 --rnn_type GRU --q_levels 256 --q_type linear --batch_size 128 --weight_norm True --learn_h0 True --which_set MUSIC
+$ THEANO_FLAGS=mode=FAST_RUN,device=gpu0,floatX=float32 python -u models/two_tier/two_tier32.py --exp BEST_2TIER --n_frames 64 --frame_size 16 --emb_size 256 --skip_conn False --dim 1024 --n_rnn 3 --rnn_type GRU --q_levels 256 --q_type linear --batch_size 128 --weight_norm True --learn_h0 True --which_set user_dataseet_name
 ```
 ### SampleRNN (3-tier)
 ```
@@ -126,14 +136,15 @@ optional arguments:
 ```
 To run:
 ```
-$ THEANO_FLAGS=mode=FAST_RUN,device=gpu0,floatX=float32 python -u models/three_tier/three_tier.py --exp BEST_3TIER --seq_len 512 --big_frame_size 8 --frame_size 2 --emb_size 256 --skip_conn False --dim 1024 --n_rnn 1 --rnn_type GRU --q_levels 256 --q_type linear --batch_size 128 --weight_norm True --learn_h0 True --which_set MUSIC
+$ THEANO_FLAGS=mode=FAST_RUN,device=gpu0,floatX=float32 python -u models/three_tier/three_tier32k.py --exp BEST_3TIER --seq_len 512 --big_frame_size 8 --frame_size 2 --emb_size 256 --skip_conn False --dim 1024 --n_rnn 1 --rnn_type GRU --q_levels 256 --q_type linear --batch_size 128 --weight_norm True --learn_h0 True --which_set your_dataset_name
+```
+
+To generate 5 sequences (10 seconds each) from a trained model:
+```
+$ THEANO_FLAGS=mode=FAST_RUN,device=gpu0,floatX=float32 python -u models/three_tier/three_tier_generate32k.py --exp BEST_3TIER --seq_len 512 --big_frame_size 8 --frame_size 2 --emb_size 256 --skip_conn False --dim 1024 --n_rnn 1 --rnn_type GRU --q_levels 256 --q_type linear --batch_size 128 --weight_norm True --learn_h0 True --which_set your_dataset_name --n_secs 10 --n_seqs 5
 ```
 
 ## Reference
 If you are using this code, please cite the paper.
 
 SampleRNN: An Unconditional End-to-End Neural Audio Generation Model. Soroush Mehri, Kundan Kumar, Ishaan Gulrajani, Rithesh Kumar, Shubham Jain, Jose Sotelo, Aaron Courville, Yoshua Bengio, 5th International Conference on Learning Representations (ICLR 2017), submitted and under review.
-
-[Bib to be added soon...]
-
-If needed, please don't hesitate to contact us.
