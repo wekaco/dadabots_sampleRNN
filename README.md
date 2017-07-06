@@ -9,7 +9,16 @@ Code accompanying the paper [SampleRNN: An Unconditional End-to-End Neural Audio
 - Lasagne 0.2.dev1
 
 ## Datasets
-Music dataset was created from all 32 Beethoven’s piano sonatas available publicly on [archive.org](https://archive.org/). `datasets/music` contains scripts to preprocess and build this dataset. It is also available [here](https://drive.google.com/drive/folders/0B7riq_C8aslvbWJuMGhJRFBmSHM?usp=sharing) for download. Extract the tar file and put all the numpy files in `datasets/music` directory.
+To preprocess audio for a 32k new experiment, place your audio here:
+```
+datasets/music/downloads/
+```
+then run the new experiment python script located in the datasets/music directory:
+
+```
+cd datasets/music/
+python new_experiment32k.py your_datasets_name downloads/
+```
 
 ## Training
 To train a model on an existing dataset with accelerated GPU processing, you need to run following lines from the root of `sampleRNN_ICLR2017` folder which corresponds to the best found set of hyper-paramters.
@@ -71,7 +80,7 @@ $ THEANO_FLAGS=mode=FAST_RUN,device=gpu0,floatX=float32 python -u models/two_tie
 ### SampleRNN (3-tier)
 ```
 $ python models/three_tier/three_tier.py -h
-usage: three_tier.py [-h] [--exp EXP] --seq_len SEQ_LEN --big_frame_size
+usage: three_tier16k.py [-h] [--exp EXP] --seq_len SEQ_LEN --big_frame_size
                      BIG_FRAME_SIZE --frame_size FRAME_SIZE --weight_norm
                      WEIGHT_NORM --emb_size EMB_SIZE --skip_conn SKIP_CONN
                      --dim DIM --n_rnn {1,2,3,4,5} --rnn_type {LSTM,GRU}
@@ -107,8 +116,8 @@ optional arguments:
                         Quantization in linear-scale, a-law-companding, or mu-
                         law compandig. With mu-/a-law quantization level shoud
                         be set as 256
-  --which_set {ONOM,BLIZZ,MUSIC}
-                        ONOM, BLIZZ, or MUSIC
+  --which_set WHICH_SET
+                        any preprocessed set in the datasets/music/ directory
   --batch_size {64,128,256}
                         size of mini-batch
   --debug               Debug mode
