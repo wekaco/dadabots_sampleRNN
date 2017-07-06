@@ -137,12 +137,12 @@ optional arguments:
 ```
 To run:
 ```
-$ THEANO_FLAGS=mode=FAST_RUN,device=gpu0,floatX=float32 python -u models/three_tier/three_tier32k.py --exp BEST_3TIER --seq_len 512 --big_frame_size 8 --frame_size 2 --emb_size 256 --skip_conn False --dim 1024 --n_rnn 1 --rnn_type GRU --q_levels 256 --q_type linear --batch_size 128 --weight_norm True --learn_h0 True --which_set your_dataset_name
+$ THEANO_FLAGS=mode=FAST_RUN,device=gpu0,floatX=float32 python -u models/two_tier/two_tier32k.py --exp BEST_2TIER --seq_len 512 --big_frame_size 8 --frame_size 2 --emb_size 256 --skip_conn False --dim 1024 --n_rnn 1 --rnn_type GRU --q_levels 256 --q_type linear --batch_size 128 --weight_norm True --learn_h0 True --which_set your_dataset_name
 ```
 
 To generate 5 sequences (10 seconds each) from a trained model:
 ```
-$ THEANO_FLAGS=mode=FAST_RUN,device=gpu0,floatX=float32 python -u models/three_tier/three_tier_generate32k.py --exp BEST_3TIER --seq_len 512 --big_frame_size 8 --frame_size 2 --emb_size 256 --skip_conn False --dim 1024 --n_rnn 1 --rnn_type GRU --q_levels 256 --q_type linear --batch_size 128 --weight_norm True --learn_h0 True --which_set your_dataset_name --n_secs 10 --n_seqs 5
+$ THEANO_FLAGS=mode=FAST_RUN,device=gpu0,floatX=float32 python -u models/two_tier/two_tier_generate32k.py --exp BEST_2TIER --seq_len 512 --big_frame_size 8 --frame_size 2 --emb_size 256 --skip_conn False --dim 1024 --n_rnn 1 --rnn_type GRU --q_levels 256 --q_type linear --batch_size 128 --weight_norm True --learn_h0 True --which_set your_dataset_name --n_secs 10 --n_seqs 5
 ```
 
 ## Reference
