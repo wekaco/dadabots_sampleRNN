@@ -5,6 +5,7 @@ Code accompanying the paper [SampleRNN: An Unconditional End-to-End Neural Audio
 ## Features of the ZVK fork:
 
 - auto-preprocessing (audio conversion, concatenation, chunking, and saving .npy files)
+- generate scripts for trained datasets
 - scripts for different sample rates are available (16k, 32k)
 - any processed datasets can be loaded into the two-tier network via arguments
 - sampling is picked from distribution (not max)
