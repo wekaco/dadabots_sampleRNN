@@ -2,7 +2,7 @@
 
 Code accompanying the paper [SampleRNN: An Unconditional End-to-End Neural Audio Generation Model](https://openreview.net/forum?id=SkxKPDv5xl). Samples are available [here](https://soundcloud.com/samplernn/sets).
 
-## Improvements made to the ZVK fork:
+## Features of the ZVK fork:
 
 - auto-preprocessing (audio conversion, concatenation, chunking, and saving .npy files)
 - scripts for differnet sample rates are available (16k, 32k)
