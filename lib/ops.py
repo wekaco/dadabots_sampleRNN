@@ -789,9 +789,7 @@ def stackedLSTM(
         skip_conn):
     """
     Note:
-        Hard-coded stacked LSTM. Number of LSTMs should be smaller than 6.
-        Also handles skip connections which is to be added in the 'automatic'
-        version of this function.
+        handles skip connections
         For n_rnn = 1, skip connection is not defined. Just accepts
         skip_conn == False and saves computation time.
 

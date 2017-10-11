@@ -93,7 +93,7 @@ def get_args():
     parser.add_argument('--dim', help='Dimension of RNN and MLPs',\
             type=check_positive, required=True)
     parser.add_argument('--n_rnn', help='Number of layers in the stacked RNN',
-            type=check_positive, choices=xrange(1,40), required=True)
+            type=check_positive, choices=xrange(1,12), required=True)
     parser.add_argument('--rnn_type', help='GRU or LSTM', choices=['LSTM', 'GRU'],\
             required=True)
     parser.add_argument('--learn_h0', help='Whether to learn the initial state of RNN',\
@@ -160,7 +160,7 @@ TRAIN_MODE = 'time' # To use PRINT_TIME and STOP_TIME
 PRINT_ITERS = 10000 # Print cost, generate samples, save model checkpoint every N iterations.
 STOP_ITERS = 100000 # Stop after this many iterations
 # TODO:
-PRINT_TIME = 60*60*24*1 # Print cost, generate samples, save model checkpoint every N seconds.
+PRINT_TIME = 60*60*24*2 # Print cost, generate samples, save model checkpoint every N seconds.
 STOP_TIME = 60*60*24*4 # Stop after this many seconds of actual training (not including time req'd to generate samples etc.)
 N_SEQS = 5  # Number of samples to generate every time monitoring.
 # TODO:

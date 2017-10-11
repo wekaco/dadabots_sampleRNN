@@ -146,7 +146,7 @@ if Q_TYPE == 'mu-law' and Q_LEVELS != 256:
 
 # Fixed hyperparams
 GRAD_CLIP = 1 # Elementwise grad clip threshold
-BITRATE = 32000
+BITRATE = 16000
 
 # Other constants
 #TRAIN_MODE = 'iters' # To use PRINT_ITERS and STOP_ITERS
