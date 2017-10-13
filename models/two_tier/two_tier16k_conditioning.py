@@ -287,7 +287,7 @@ def frame_level_rnn(input_sequences, h0, reset, features):
 
     print "features.shape1", features.shape
     # calculate the mean features over the whole frame
-    features = features.mean(axis=2).reshape(features.shape[0], features.shape[1], features.shape[3])
+    features = features.mean(axis=2).reshape((features.shape[0], features.shape[1], features.shape[3]))
     print "features.shape2", features.shape
 
     print "FRAME_SIZE", FRAME_SIZE
