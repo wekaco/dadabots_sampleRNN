@@ -243,18 +243,18 @@ def __music_feed_epoch(sample_data, feature_data,
         ], axis=1)
 
 
-        # cj (conditioning): not sure what this is for
+        """# cj (conditioning): not sure what this is for
         features = np.concatenate([
             np.full((batch_size, overlap, num_features), 0, dtype='float32'),
             features
-        ], axis=1)
+        ], axis=1)"""
         print "overlap", overlap
 
         for i in xrange(batch_seq_len // seq_len):
             reset = np.int32(i==0)
             subbatch = batch[:, i*seq_len : (i+1)*seq_len + overlap]
             submask = mask[:, i*seq_len : (i+1)*seq_len + overlap]
-            subfeatures = features[:, i*seq_len : (i+1)*seq_len + overlap]
+            subfeatures = features[:, i*seq_len : (i+1)*seq_len]
             # calculate the mean features over the whole sequence
             #subfeatures = np.mean(features, axis=1).reshape(features.shape[0], features.shape[2])
             yield (subbatch, reset, submask, subfeatures)
