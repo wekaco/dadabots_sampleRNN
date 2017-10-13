@@ -59,7 +59,7 @@ feature_matrix = []
 # size in seconds of each chunk
 size = 8
 # number of chunks
-num = 3200
+num = 100
 
 
 for i in xrange(0, num):
