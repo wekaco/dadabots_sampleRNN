@@ -295,6 +295,11 @@ def music_train_feed_epoch(d_name, *args):
     generator = __music_feed_epoch(sample_data, feature_data, *args)
     return generator
 
+def get_feature_data(d_name):
+    data_path = find_dataset(__train(__getFeatures(d_name)))
+    feature_data = np.load(data_path)
+    return feature_data
+
 def music_valid_feed_epoch(d_name, *args):
     """
     See:

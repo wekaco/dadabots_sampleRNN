@@ -270,7 +270,6 @@ def frame_level_rnn(input_sequences, h0, reset, features):
 
     print "SEQ_LEN: ", SEQ_LEN
     print "N_FEATURES: ", N_FEATURES
-    print "features.shape: ", features.shape
 
     frames = input_sequences.reshape((
         input_sequences.shape[0],
@@ -278,7 +277,7 @@ def frame_level_rnn(input_sequences, h0, reset, features):
         FRAME_SIZE
     ))
 
-    """
+    #"""
     # calculate the mean features over the whole frame
 
     features = features.reshape((
@@ -288,11 +287,9 @@ def frame_level_rnn(input_sequences, h0, reset, features):
         features.shape[2]
     ))
     feature_size = N_FEATURES
-
-    print "features.shape1", features.shape
     features = features.mean(axis=2).reshape((features.shape[0], features.shape[1], features.shape[3]))
-    print "features.shape2", features.shape
-    #"""
+
+    """
 
     # have a feature for each sample
     features = features.reshape((
@@ -301,11 +298,7 @@ def frame_level_rnn(input_sequences, h0, reset, features):
         FRAME_SIZE * features.shape[2]
     ))
     feature_size = FRAME_SIZE * N_FEATURES
-
-
-    print "FRAME_SIZE", FRAME_SIZE
-    print "N_FEATURES", N_FEATURES
-    print "DIM", DIM
+    #"""
 
     # Rescale frames from ints in [0, Q_LEVELS) to floats in [-2, 2]
     # (a reasonable range to pass as inputs to the RNN)
@@ -322,8 +315,6 @@ def frame_level_rnn(input_sequences, h0, reset, features):
         initialization='he',
         weightnorm=WEIGHT_NORM
     )
-
-    print rnn_inp.shape
 
     # Initial state of RNNs
     learned_h0 = lib.param(
@@ -548,6 +539,35 @@ fixed_rand_h0 -= 0.5
 fixed_rand_h0 = fixed_rand_h0.astype('float32')
 
 
+## change this
+## this uses the training data features for the generative output
+## returns a tensor of shape N_FRAMES x FRAME_SIZE x N_FEATURES
+# warning this may be break if sampling more than 8 seconds
+# in which case, you want to start concatenating bits together
+def frame_features_for_generating():
+    data = get_feature_data(WHICH_SET)
+
+    ## borrow from the first 8 second chunk
+    # yes some things are hard coded
+    chunk_features = data[0]
+    num_chunk_samples = 8 * BITRATE
+    num_features = chunk_features.shape[1]
+    features = np.zeros((num_chunk_samples, num_features), dtype='float32')
+
+    # interpolate/upsample to samplerate
+    x = np.linspace(0, len(chunk_features), num_chunk_samples)
+    xp = np.linspace(0, len(chunk_features), len(chunk_features))
+    ## now is the time to upsample
+    for j in xrange(num_features):
+        fp = chunk_features[:,j]
+        interpolated = np.interp(x, xp, fp)
+        # print "interpolated.shape", interpolated.shape
+        # print "chunk_feats.shape", chunk_features.shape
+        features[:num_chunk_samples, j] = interpolated
+
+    features = features.reshape((num_chunk_samples//FRAME_SIZE, FRAME_SIZE, num_features))
+    return features
+FFFG = frame_features_for_generating()
 
 
 def generate_and_save_samples(tag):
@@ -565,14 +585,13 @@ def generate_and_save_samples(tag):
     total_time = time()
 
 
-   
 
-    LENGTH = test_feats.shape[1]
-    LENGTH *= 80
-    N_SECS = LENGTH/BITRATE
+    #LENGTH = test_feats.shape[1]
+    #LENGTH *= 80
+    #N_SECS = LENGTH/BITRATE
 
     # Generate N_SEQS' sample files, each 5 seconds long
-    # N_SECS = 5
+    N_SECS = 5
     LENGTH = N_SECS*BITRATE if not args.debug else 100
 
     samples = numpy.zeros((N_SEQS, LENGTH), dtype='int32')
@@ -589,8 +608,8 @@ def generate_and_save_samples(tag):
     for t in xrange(FRAME_SIZE, LENGTH):
 
         if t % FRAME_SIZE == 0:
-            current_features = test_feats[:, t, :]
-            current_features = current_features[:, None, :]
+            current_features = FFFG[t, :, :]
+            #current_features = current_features[:, None, :]
 
             frame_level_outputs, h0 = frame_level_generate_fn(
                 samples[:, t-FRAME_SIZE:t],
@@ -718,7 +737,7 @@ while True:
     costs.append(cost)
 
     # Monitoring step
-    if (TRAIN_MODE=='iters' and total_iters-last_print_iters == PRINT_ITERS) or \
+    if (True or TRAIN_MODE=='iters' and total_iters-last_print_iters == PRINT_ITERS) or \
         (TRAIN_MODE=='time' and total_time-last_print_time >= PRINT_TIME) or \
         (TRAIN_MODE=='time-iters' and total_time-last_print_time >= PRINT_TIME) or \
         (TRAIN_MODE=='iters-time' and total_iters-last_print_iters >= PRINT_ITERS) or \
