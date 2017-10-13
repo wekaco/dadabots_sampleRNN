@@ -110,7 +110,7 @@ __fixed_shuffle(paths)
 # np_arr[0] are the PCM samples as usual
 # np_arr[1] are the feature vectors 
 
-arr = []
+arr = [[],[]]
 # Turn the FLACs into PCM samples
 arr[0] = [(scikits.audiolab.flacread(p)[0]).astype('float16') for p in paths]
 arr[1] = feature_matrix
