@@ -138,7 +138,7 @@ def __make_random_batches(sample_data, feature_data, batch_size):
     print "len(sample_data)", len(sample_data)
     print "batch_size", batch_size
     print len(sample_data) / batch_size
-    
+
     for i in xrange(len(sample_data) / batch_size):
         sample_batch = sample_data[i*batch_size:(i+1)*batch_size]
         feature_batch = feature_data[i*batch_size:(i+1)*batch_size]
@@ -174,23 +174,28 @@ def __music_feed_epoch(sample_data, feature_data,
 
     for bch in batches:
 
-
+        print "len(bch)", len(bch)
+        print bch[0].shape
         # batch_seq_len = length of longest sequence in the batch, rounded up to
         # the nearest SEQ_LEN.
         batch_seq_len = len(bch[0][0])  # should be 8*16000
         batch_seq_len = __round_to(batch_seq_len, seq_len)
+        print "batch_seq_len", batch_seq_len
 
         batch = np.zeros(
             (batch_size, batch_seq_len),
             dtype='float64'
         )
 
+        num_features = bch[1].shape[2]
         # cj (conditioning)
-        features = np.ones(batch.shape, dtype='float32')
+        features = np.ones((batch_size, batch_seq_len, num_features), dtype='float32')
 
         mask = np.ones(batch.shape, dtype='float32')
 
-        for i, data in enumerate(bch):           
+        for i, data in enumerate(bch):  
+            print "len(data[0])", len(data[0])        
+            print "len(data[1])", len(data[1])
             # samples are in data[0]
             #data, fs, enc = scikits.audiolab.flacread(path)
             # data is float16 from reading the npy file
