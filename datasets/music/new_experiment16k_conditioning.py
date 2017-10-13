@@ -47,32 +47,36 @@ for i in xrange(int((length//8)*3)-1):
     os.system('ffmpeg -ss {} -t 8 -i {}/preprocess_all_audio.wav -ac 1 -ab 16k -ar 16000 {}/p{}.flac'.format(time, OUTPUT_DIR, OUTPUT_DIR, i))
 '''
 
+# size in seconds of each chunk
+size = 8
+# number of chunks
+num_chunks = 100
+
 # cj (conditioning) generate the feature matrix for the entire dataset WAV
 features = build_features("{}/preprocess_all_audio.wav".format(OUTPUT_DIR))
 # frame_rate is the number of feature frames per second
 # calcualte it by comparing length of features to length of audio 
 # don't confuse feature_frames for the SampleRNN frames
+total_num_frames = features.shape[0]
+num_features = features.shape[1]
 frame_rate = len(features)/float(length)
-# a matrix of num_frames x num_features
-feature_matrix = []
-
-# size in seconds of each chunk
-size = 8
-# number of chunks
-num = 100
+# number of frames per chunk of audio 
+frames_per_chunk = int(math.floor((size)*frame_rate))
+# a matrix of chunks x frames x features
+feature_matrix = np.zeros((num, frames_per_chunk, num_features), dtype='float32')
 
 
-for i in xrange(0, num):
-    time = i * ((length-size)/float(num))
+
+for i in xrange(0, num_chunks):
+    time = i * ((length-size)/float(num_chunks))
 
     # build the feature_matrix
     # it's the feature timesliced according to the start and end times of the chunk
     start_frame = int(math.floor((time)*frame_rate))
-    end_frame = int(math.floor((time+size)*frame_rate))
+    end_frame = start_frame + frames_per_chunk
     if(len(features)>=end_frame): 
         end_frame = len(features)-1
-    subfeatures = features[start_frame:end_frame]
-    feature_matrix.append(subfeatures)
+    feature_matrix[i] = features[start_frame:end_frame]
 
     os.system('ffmpeg -ss {} -t 8 -i {}/preprocess_all_audio.wav -ac 1 -ab 16k -ar 16000 {}/p{}.flac'.format(time, OUTPUT_DIR, OUTPUT_DIR, i))
 print "clean up"
@@ -112,8 +116,8 @@ __fixed_shuffle(paths)
 
 arr = [[],[]]
 # Turn the FLACs into PCM samples
-arr[0] = [(scikits.audiolab.flacread(p)[0]).astype('float16') for p in paths]
-arr[1] = feature_matrix
+arr[0] = np.array([(scikits.audiolab.flacread(p)[0]).astype('float16') for p in paths])
+arr[1] = np.array(feature_matrix)
 
 np_arr = np.array(arr)
 # 88/6/6 split

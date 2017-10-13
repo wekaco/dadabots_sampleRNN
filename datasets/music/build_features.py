@@ -4,5 +4,7 @@
 # So you can use any frame_rate (hop_size)
 import numpy as np
 def build_features(filename):
-    features = np.array(range(0,1000))/1000
+    features = np.ones((1000,1),dtype='float32')
+    for i,_ in enumerate(features):
+	    features[i,0] = i/1000.0 
     return features
