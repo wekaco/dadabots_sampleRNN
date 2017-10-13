@@ -598,7 +598,7 @@ def generate_and_save_samples(tag):
     samples = numpy.zeros((N_SEQS, LENGTH), dtype='int32')
     samples[:, :FRAME_SIZE] = Q_ZERO
 
-    current_features = numpy.zeros((N_SEQS, LENGTH, N_FEATURES), dtype='int32')
+    current_features = numpy.zeros((N_SEQS, LENGTH, N_FEATURES), dtype='float32')
 
 
     # First half zero, others fixed random at each checkpoint
