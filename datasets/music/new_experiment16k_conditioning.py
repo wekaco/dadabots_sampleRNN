@@ -67,8 +67,8 @@ for i in xrange(0, num):
 
     # build the feature_matrix
     # it's the feature timesliced according to the start and end times of the chunk
-    start_frame = math.floor((time)*frame_rate)
-    end_frame = math.floor((time+size)*frame_rate)
+    start_frame = int(math.floor((time)*frame_rate))
+    end_frame = int(math.floor((time+size)*frame_rate))
     if(len(features)>=end_frame): 
         end_frame = len(features)-1
     subfeatures = features[start_frame:end_frame]
