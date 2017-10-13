@@ -298,7 +298,7 @@ def frame_level_rnn(input_sequences, h0, reset, features):
     rnn_inp = lib.ops.Linear(
         'FrameLevel.rnn_inp_fusion',
         FRAME_SIZE,
-        FRAME_SIZE,
+        DIM,
         frames,
         initialization='he',
         weightnorm=WEIGHT_NORM
@@ -322,7 +322,7 @@ def frame_level_rnn(input_sequences, h0, reset, features):
     if RNN_TYPE == 'GRU':
         rnns_out, last_hidden = lib.ops.stackedGRU('FrameLevel.GRU',
                                                    N_RNN,
-                                                   FRAME_SIZE,
+                                                   DIM,
                                                    DIM,
                                                    rnn_inp,
                                                    h0=h0,
@@ -331,7 +331,7 @@ def frame_level_rnn(input_sequences, h0, reset, features):
     elif RNN_TYPE == 'LSTM':
         rnns_out, last_hidden = lib.ops.stackedLSTM('FrameLevel.LSTM',
                                                     N_RNN,
-                                                    FRAME_SIZE,
+                                                    DIM,
                                                     DIM,
                                                     rnn_inp,
                                                     h0=h0,
