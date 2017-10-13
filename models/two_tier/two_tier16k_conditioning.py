@@ -278,6 +278,10 @@ def frame_level_rnn(input_sequences, h0, reset, features):
         FRAME_SIZE
     ))
 
+    print "FRAME_SIZE", FRAME_SIZE
+    print "N_FEATURES", N_FEATURES
+    print "DIM", DIM
+
     # Rescale frames from ints in [0, Q_LEVELS) to floats in [-2, 2]
     # (a reasonable range to pass as inputs to the RNN)
     frames = (frames.astype('float32') / lib.floatX(Q_LEVELS/2)) - lib.floatX(1)
@@ -310,7 +314,7 @@ def frame_level_rnn(input_sequences, h0, reset, features):
     if RNN_TYPE == 'GRU':
         rnns_out, last_hidden = lib.ops.stackedGRU('FrameLevel.GRU',
                                                    N_RNN,
-                                                   DIM,
+                                                   FRAME_SIZE,
                                                    DIM,
                                                    rnn_inp,
                                                    h0=h0,
@@ -319,7 +323,7 @@ def frame_level_rnn(input_sequences, h0, reset, features):
     elif RNN_TYPE == 'LSTM':
         rnns_out, last_hidden = lib.ops.stackedLSTM('FrameLevel.LSTM',
                                                     N_RNN,
-                                                    DIM,
+                                                    FRAME_SIZE,
                                                     DIM,
                                                     rnn_inp,
                                                     h0=h0,
