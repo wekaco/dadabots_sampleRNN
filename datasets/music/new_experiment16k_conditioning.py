@@ -74,7 +74,7 @@ for i in xrange(0, num_chunks):
     # it's the feature timesliced according to the start and end times of the chunk
     start_frame = int(math.floor((time)*frame_rate))
     end_frame = start_frame + frames_per_chunk
-    if(len(features)>=end_frame): 
+    if(len(features)<=end_frame): 
         end_frame = len(features)-1
     print "start_frame", start_frame
     print "end_frame", end_frame
