@@ -278,6 +278,12 @@ def frame_level_rnn(input_sequences, h0, reset, features):
         FRAME_SIZE
     ))
 
+    features = features.reshape((
+        features.shape[0],
+        features.shape[1] // FRAME_SIZE,
+        FRAME_SIZE
+    ))
+
     print "FRAME_SIZE", FRAME_SIZE
     print "N_FEATURES", N_FEATURES
     print "DIM", DIM
@@ -291,9 +297,9 @@ def frame_level_rnn(input_sequences, h0, reset, features):
     # Fuse previous frame and the current local conditioning features
     rnn_inp = lib.ops.Linear(
         'FrameLevel.rnn_inp_fusion',
-        FRAME_SIZE,
+        [FRAME_SIZE, NUM_FEATURES],
         DIM,
-        frames,
+        [frames, features],
         initialization='he',
         weightnorm=WEIGHT_NORM
     )
@@ -325,7 +331,7 @@ def frame_level_rnn(input_sequences, h0, reset, features):
     elif RNN_TYPE == 'LSTM':
         rnns_out, last_hidden = lib.ops.stackedLSTM('FrameLevel.LSTM',
                                                     N_RNN,
-                                                    FRAME_SIZE,
+                                                    DIM,
                                                     DIM,
                                                     frames,
                                                     h0=h0,
