@@ -213,13 +213,13 @@ def __music_feed_epoch(sample_data, feature_data,
             # feature matrix is in data[1]
             x = np.linspace(0, len(chunk_features), len(chunk_samples))
             xp = np.linspace(0, len(chunk_features), len(chunk_features))
-            fp = chunk_features
             ## now is the time to upsample
-            interpolated = np.interp(x, xp, fp)
-            print "interpolated.shape", interpolated.shape
-            print "chunk_feats.shape", chunk_features.shape
-
-            features[i, :len(data[0])] = interpolated
+            for j in xrange(num_features):
+                fp = chunk_features[:,j]
+                interpolated = np.interp(x, xp, fp)
+                print "interpolated.shape", interpolated.shape
+                print "chunk_feats.shape", chunk_features.shape
+                features[i, :len(data[0]), j] = interpolated
 
 
         if not real_valued:
