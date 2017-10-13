@@ -291,9 +291,9 @@ def frame_level_rnn(input_sequences, h0, reset, features):
     # Fuse previous frame and the current local conditioning features
     rnn_inp = lib.ops.Linear(
         'FrameLevel.rnn_inp_fusion',
-        [FRAME_SIZE, N_FEATURES],
+        FRAME_SIZE,
         DIM,
-        [frames, features],
+        frames,
         initialization='he',
         weightnorm=WEIGHT_NORM
     )
