@@ -267,7 +267,6 @@ def frame_level_rnn(input_sequences, h0, reset, features):
     features.shape:        (batch size, SEQ_LEN, N_FEATURES)
     output.shape:          (batch size, n frames * FRAME_SIZE, DIM)
     """
-    N_FEATURES = features.shape[2]
 
     print "SEQ_LEN: ", SEQ_LEN
     print "N_FEATURES: ", N_FEATURES
