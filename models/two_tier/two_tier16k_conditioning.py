@@ -298,6 +298,8 @@ def frame_level_rnn(input_sequences, h0, reset, features):
         weightnorm=WEIGHT_NORM
     )
 
+    print rnn_inp.shape
+
     # Initial state of RNNs
     learned_h0 = lib.param(
         'FrameLevel.h0',

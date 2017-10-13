@@ -199,8 +199,8 @@ def __music_feed_epoch(sample_data, feature_data,
         for i, _ in enumerate(bch[0]):  
             chunk_samples = bch[0][i]
             chunk_features = bch[1][i]
-            print "len(chunk_samples)", len(chunk_samples)        
-            print "len(chunk_features)", len(chunk_features)
+            # print "len(chunk_samples)", len(chunk_samples)        
+            # print "len(chunk_features)", len(chunk_features)
             # samples are in data[0]
             #data, fs, enc = scikits.audiolab.flacread(path)
             # data is float16 from reading the npy file
@@ -208,7 +208,7 @@ def __music_feed_epoch(sample_data, feature_data,
             # This shouldn't change anything. All the flac files for Music
             # are the same length and the mask should be 1 every where.
             # mask[i, len(data):] = np.float32(0)
-            print "batch.shape", batch.shape
+            # print "batch.shape", batch.shape
 
             # feature matrix is in data[1]
             x = np.linspace(0, len(chunk_features), len(chunk_samples))
@@ -217,8 +217,8 @@ def __music_feed_epoch(sample_data, feature_data,
             for j in xrange(num_features):
                 fp = chunk_features[:,j]
                 interpolated = np.interp(x, xp, fp)
-                print "interpolated.shape", interpolated.shape
-                print "chunk_feats.shape", chunk_features.shape
+                # print "interpolated.shape", interpolated.shape
+                # print "chunk_feats.shape", chunk_features.shape
                 features[i, :len(chunk_samples), j] = interpolated
 
         print "batch.shape, before", batch.shape
