@@ -676,7 +676,9 @@ while True:
         print "[Another epoch]",
 
     seqs, reset, mask, feats = mini_batch
-
+    print "seqs.shape", seqs.shape
+    print "feats.shape", feats.shape
+    
     start_time = time()
     cost, h0 = train_fn(seqs, h0, reset, mask, feats)
     total_time += time() - start_time
