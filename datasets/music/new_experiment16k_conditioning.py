@@ -1,7 +1,8 @@
 import numpy as np
 import sys, os, subprocess, scikits.audiolab, random, time, glob, math
 
-from build_features import build_features 
+
+from build_features import * 
 
 PWD = os.getcwd()
 print 'PWD is', PWD
@@ -53,7 +54,7 @@ size = 8
 num_chunks = 3200
 
 # cj (conditioning) generate the feature matrix for the entire dataset WAV
-features = build_features("{}/preprocess_all_audio.wav".format(OUTPUT_DIR))
+features = build_onset_envelope_feature("{}/preprocess_all_audio.wav".format(OUTPUT_DIR))
 # frame_rate is the number of feature frames per second
 # calcualte it by comparing length of features to length of audio 
 # don't confuse feature_frames for the SampleRNN frames
