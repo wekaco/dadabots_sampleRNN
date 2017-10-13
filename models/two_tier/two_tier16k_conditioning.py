@@ -566,7 +566,7 @@ def frame_features_for_generating():
         # print "chunk_feats.shape", chunk_features.shape
         features[:num_chunk_samples, j] = interpolated
 
-    features = features.reshape((num_chunk_samples//FRAME_SIZE, FRAME_SIZE, num_features))
+    #features = features.reshape((num_chunk_samples//FRAME_SIZE, FRAME_SIZE, num_features))
     return features
 FFFG = frame_features_for_generating()
 
@@ -598,6 +598,9 @@ def generate_and_save_samples(tag):
     samples = numpy.zeros((N_SEQS, LENGTH), dtype='int32')
     samples[:, :FRAME_SIZE] = Q_ZERO
 
+    current_features = numpy.zeros((N_SEQS, LENGTH, N_FEATURES), dtype='int32')
+
+
     # First half zero, others fixed random at each checkpoint
     h0 = numpy.zeros(
             (N_SEQS-fixed_rand_h0.shape[0], N_RNN, H0_MULT*DIM),
@@ -609,7 +612,7 @@ def generate_and_save_samples(tag):
     for t in xrange(FRAME_SIZE, LENGTH):
 
         if t % FRAME_SIZE == 0:
-            current_features = FFFG[t, :, :]
+            current_features[:, t] = FFFG[t, :]
             #current_features = current_features[:, None, :]
 
             frame_level_outputs, h0 = frame_level_generate_fn(
