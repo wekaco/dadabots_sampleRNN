@@ -221,7 +221,6 @@ def __music_feed_epoch(sample_data, feature_data,
                 # print "chunk_feats.shape", chunk_features.shape
                 features[i, :len(chunk_samples), j] = interpolated
 
-        print "batch.shape, before", batch.shape
         if not real_valued:
             batch = __batch_quantize(batch, q_levels, q_type)
 
@@ -237,23 +236,18 @@ def __music_feed_epoch(sample_data, feature_data,
                 batch
             ], axis=1).astype('float32')
 
-        print "batch.shape, after", batch.shape
 
-        print "mask.shape before", mask.shape
         mask = np.concatenate([
             np.full((batch_size, overlap), 1, dtype='float32'),
             mask
         ], axis=1)
-        print "mask.shape after", mask.shape
 
-        print "features.shape before", features.shape
 
         # cj (conditioning): not sure what this is for
         features = np.concatenate([
             np.full((batch_size, overlap, num_features), 0, dtype='float32'),
             features
         ], axis=1)
-        print "features.shape after", features.shape
         print "overlap", overlap
 
         for i in xrange(batch_seq_len // seq_len):
@@ -261,6 +255,8 @@ def __music_feed_epoch(sample_data, feature_data,
             subbatch = batch[:, i*seq_len : (i+1)*seq_len + overlap]
             submask = mask[:, i*seq_len : (i+1)*seq_len + overlap]
             subfeatures = features[:, i*seq_len : (i+1)*seq_len + overlap]
+            # calculate the mean features over the whole sequence
+            #subfeatures = np.mean(features, axis=1).reshape(features.shape[0], features.shape[2])
             yield (subbatch, reset, submask, subfeatures)
 
 def music_train_feed_epoch(d_name, *args):

@@ -281,8 +281,14 @@ def frame_level_rnn(input_sequences, h0, reset, features):
     features = features.reshape((
         features.shape[0],
         features.shape[1] // FRAME_SIZE,
-        FRAME_SIZE
+        FRAME_SIZE,
+        N_FEATURES
     ))
+
+    print "features.shape1", features.shape
+    # calculate the mean features over the whole frame
+    features = np.mean(features, axis=2).reshape(features.shape[0], features.shape[1], features.shape[3])
+    print "features.shape2", features.shape
 
     print "FRAME_SIZE", FRAME_SIZE
     print "N_FEATURES", N_FEATURES
@@ -297,9 +303,9 @@ def frame_level_rnn(input_sequences, h0, reset, features):
     # Fuse previous frame and the current local conditioning features
     rnn_inp = lib.ops.Linear(
         'FrameLevel.rnn_inp_fusion',
-        FRAME_SIZE,
+        [FRAME_SIZE, N_FEATURES],
         DIM,
-        frames,
+        [frames, features],
         initialization='he',
         weightnorm=WEIGHT_NORM
     )
