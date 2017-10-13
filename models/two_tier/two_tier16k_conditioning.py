@@ -284,7 +284,7 @@ def frame_level_rnn(input_sequences, h0, reset, features):
         FRAME_SIZE, 
         features.shape[2]
     ))
-    feature_size = features.shape[2]
+    feature_size = N_FEATURES
 
     """
     features = features.reshape((
@@ -292,7 +292,7 @@ def frame_level_rnn(input_sequences, h0, reset, features):
         features.shape[1] // FRAME_SIZE,
         FRAME_SIZE * features.shape[2]
     ))
-    feature_size = features.shape[2]
+    feature_size = FRAME_SIZE * N_FEATURES
     """
 
     print "features.shape1", features.shape
@@ -301,7 +301,7 @@ def frame_level_rnn(input_sequences, h0, reset, features):
     print "features.shape2", features.shape
 
     print "FRAME_SIZE", FRAME_SIZE
-    print "N_FEATURES", features.shape[2]
+    print "N_FEATURES", N_FEATURES
     print "DIM", DIM
 
     # Rescale frames from ints in [0, Q_LEVELS) to floats in [-2, 2]
