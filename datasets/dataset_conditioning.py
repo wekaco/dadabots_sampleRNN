@@ -138,6 +138,7 @@ def __make_random_batches(sample_data, feature_data, batch_size):
         feature_batch = feature_data[i*batch_size:(i+1)*batch_size]
         batches.append([sample_batch, feature_batch])
 
+    print "len(batches)", len(batches)
     __fixed_shuffle(batches)
     return batches
 
@@ -191,11 +192,13 @@ def __music_feed_epoch(sample_data, feature_data,
             # This shouldn't change anything. All the flac files for Music
             # are the same length and the mask should be 1 every where.
             # mask[i, len(data):] = np.float32(0)
+            print "batch.shape", batch.shape
 
             # feature matrix is in data[1]
             features[i, :len(data[1])] = data[1]
             ## now is the time to upsample
-            
+            print "features.shape", features.shape
+
 
         if not real_valued:
             batch = __batch_quantize(batch, q_levels, q_type)
@@ -260,6 +263,8 @@ def music_train_feed_epoch(d_name, *args):
     # get local conditioning features
     data_path = find_dataset(__train(__getFeatures(d_name)))
     feature_data = np.load(data_path)
+    print "feature file: ", data_path
+    print "feature_data.shape", feature_data.shape
 
     generator = __music_feed_epoch(sample_data, feature_data, *args)
     return generator
