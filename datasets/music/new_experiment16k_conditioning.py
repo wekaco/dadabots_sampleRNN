@@ -63,7 +63,7 @@ frame_rate = len(features)/float(length)
 # number of frames per chunk of audio 
 frames_per_chunk = int(math.floor((size)*frame_rate))
 # a matrix of chunks x frames x features
-feature_matrix = np.zeros((num, frames_per_chunk, num_features), dtype='float32')
+feature_matrix = np.zeros((num_chunks, frames_per_chunk, num_features), dtype='float32')
 
 
 
