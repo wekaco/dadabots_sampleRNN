@@ -176,6 +176,7 @@ def __music_feed_epoch(sample_data, feature_data,
 
         print "len(bch)", len(bch)
         print bch[0].shape
+        print bch[1].shape
         # batch_seq_len = length of longest sequence in the batch, rounded up to
         # the nearest SEQ_LEN.
         batch_seq_len = len(bch[0][0])  # should be 8*16000
@@ -190,31 +191,33 @@ def __music_feed_epoch(sample_data, feature_data,
         num_features = bch[1].shape[2]
         # cj (conditioning)
         features = np.ones((batch_size, batch_seq_len, num_features), dtype='float32')
+        print "num_features", num_features
+        print "features.shape", features.shape
 
         mask = np.ones(batch.shape, dtype='float32')
 
-        for i, data in enumerate(bch):  
-            print "len(data[0])", len(data[0])        
-            print "len(data[1])", len(data[1])
+        for i, _ in enumerate(bch[0]):  
+            chunk_samples = bch[0][i]
+            chunk_features = bch[1][i]
+            print "len(chunk_samples)", len(chunk_samples)        
+            print "len(chunk_features)", len(chunk_features)
             # samples are in data[0]
             #data, fs, enc = scikits.audiolab.flacread(path)
             # data is float16 from reading the npy file
-            batch[i, :len(data[0])] = data[0]
+            batch[i, :len(chunk_samples)] = chunk_samples
             # This shouldn't change anything. All the flac files for Music
             # are the same length and the mask should be 1 every where.
             # mask[i, len(data):] = np.float32(0)
             print "batch.shape", batch.shape
 
             # feature matrix is in data[1]
-            chunk_feats = data[1]
-            x = np.linspace(0, chunk_feats.shape[0], batch.shape[1])
-            xp = np.linspace(0, chunk_feats.shape[0], chunk_feats.shape[0])
-            fp = chunk_feats
+            x = np.linspace(0, chunk_features.shape[0], chunk_samples.shape[1])
+            xp = np.linspace(0, chunk_features.shape[0], chunk_features.shape[0])
+            fp = chunk_features
             ## now is the time to upsample
-
             interpolated = np.interp(x, xp, fp)
             print "interpolated.shape", interpolated.shape
-            print "chunk_feats.shape", chunk_feats.shape
+            print "chunk_feats.shape", chunk_features.shape
 
             features[i, :len(data[0])] = interpolated
 
