@@ -1,5 +1,5 @@
 import numpy as np
-import sys, os, subprocess, scikits.audiolab, random, time, glob
+import sys, os, subprocess, scikits.audiolab, random, time, glob, math
 
 from build_features import build_features 
 
@@ -67,14 +67,14 @@ for i in xrange(0, num):
 
     # build the feature_matrix
     # it's the feature timesliced according to the start and end times of the chunk
-    start_frame = floor((time)*frame_rate)
-    end_frame = floor((time+size)*frame_rate)
+    start_frame = math.floor((time)*frame_rate)
+    end_frame = math.floor((time+size)*frame_rate)
     if(len(features)>=end_frame): 
         end_frame = len(features)-1
     subfeatures = features[start_frame:end_frame]
     feature_matrix.append(subfeatures)
 
-    os.system('ffmpeg -ss {} -t {} -i {}/preprocess_all_audio.wav -ac 1 -ab 16k -ar 16000 {}/p{}.flac'.format(time, size, OUTPUT_DIR, OUTPUT_DIR, i))
+    os.system('ffmpeg -ss {} -t 8 -i {}/preprocess_all_audio.wav -ac 1 -ab 16k -ar 16000 {}/p{}.flac'.format(time, OUTPUT_DIR, OUTPUT_DIR, i))
 print "clean up"
 
 
