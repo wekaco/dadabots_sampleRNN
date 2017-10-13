@@ -219,7 +219,7 @@ def __music_feed_epoch(sample_data, feature_data,
                 interpolated = np.interp(x, xp, fp)
                 print "interpolated.shape", interpolated.shape
                 print "chunk_feats.shape", chunk_features.shape
-                features[i, :len(data[0]), j] = interpolated
+                features[i, :len(chunk_samples), j] = interpolated
 
 
         if not real_valued:
