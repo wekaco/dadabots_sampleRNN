@@ -76,6 +76,15 @@ for i in xrange(0, num_chunks):
     end_frame = start_frame + frames_per_chunk
     if(len(features)>=end_frame): 
         end_frame = len(features)-1
+    print "start_frame", start_frame
+    print "end_frame", end_frame
+    print "features[start:end].shape", features[start_frame:end_frame].shape
+    print "len(features)", len(features)
+    print "time", time 
+    print "frames_per_chunk", frames_per_chunk
+    print "frame_rate", frame_rate
+    print "total_num_frames", total_num_frames
+    print "num_features", num_features
     feature_matrix[i] = features[start_frame:end_frame]
 
     os.system('ffmpeg -ss {} -t 8 -i {}/preprocess_all_audio.wav -ac 1 -ab 16k -ar 16000 {}/p{}.flac'.format(time, OUTPUT_DIR, OUTPUT_DIR, i))
