@@ -50,7 +50,7 @@ for i in xrange(int((length//8)*3)-1):
 # size in seconds of each chunk
 size = 8
 # number of chunks
-num_chunks = 100
+num_chunks = 3200
 
 # cj (conditioning) generate the feature matrix for the entire dataset WAV
 features = build_features("{}/preprocess_all_audio.wav".format(OUTPUT_DIR))
