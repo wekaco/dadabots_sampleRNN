@@ -609,6 +609,7 @@ while True:
         print "[Another epoch]",
 
     seqs, reset, mask = mini_batch
+    print "seqs.shape", seqs.shape
 
     start_time = time()
     cost, h0 = train_fn(seqs, h0, reset, mask)
