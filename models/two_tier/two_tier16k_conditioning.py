@@ -545,7 +545,7 @@ fixed_rand_h0 = fixed_rand_h0.astype('float32')
 # warning this may be break if sampling more than 8 seconds
 # in which case, you want to start concatenating bits together
 def frame_features_for_generating():
-    data = get_feature_data(WHICH_SET)
+    data = datasets.dataset_conditioning.get_feature_data(WHICH_SET)
 
     ## borrow from the first 8 second chunk
     # yes some things are hard coded
