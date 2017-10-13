@@ -324,7 +324,7 @@ def frame_level_rnn(input_sequences, h0, reset, features):
                                                    N_RNN,
                                                    DIM,
                                                    DIM,
-                                                   frames,
+                                                   rnn_inp,
                                                    h0=h0,
                                                    weightnorm=WEIGHT_NORM,
                                                    skip_conn=SKIP_CONN)
@@ -333,7 +333,7 @@ def frame_level_rnn(input_sequences, h0, reset, features):
                                                     N_RNN,
                                                     DIM,
                                                     DIM,
-                                                    frames,
+                                                    rnn_inp,
                                                     h0=h0,
                                                     weightnorm=WEIGHT_NORM,
                                                     skip_conn=SKIP_CONN)
