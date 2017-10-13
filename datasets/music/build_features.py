@@ -3,8 +3,8 @@
 # However long the matrix is, we assume it matches the length of the WAV
 # So you can use any frame_rate (hop_size)
 import numpy as np
-from librosa import * 
-
+import librosa
+import librosa.onset
 def build_dummy_features(filename):
     features = np.ones((1000,1),dtype='float32')
     for i,_ in enumerate(features):

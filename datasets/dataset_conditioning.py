@@ -190,7 +190,7 @@ def __music_feed_epoch(sample_data, feature_data,
 
         num_features = bch[1].shape[2]
         # cj (conditioning)
-        features = np.ones((batch_size, batch_seq_len, num_features), dtype='float32')
+        features = np.zeros((batch_size, batch_seq_len, num_features), dtype='float32')
         print "num_features", num_features
         print "features.shape", features.shape
 
@@ -250,7 +250,7 @@ def __music_feed_epoch(sample_data, feature_data,
 
         # cj (conditioning): not sure what this is for
         features = np.concatenate([
-            np.full((batch_size, overlap), 1, dtype='float32'),
+            np.full((batch_size, overlap, num_features), 0, dtype='float32'),
             features
         ], axis=1)
         print "features.shape after", print features.shape
