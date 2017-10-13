@@ -221,7 +221,7 @@ def __music_feed_epoch(sample_data, feature_data,
                 print "chunk_feats.shape", chunk_features.shape
                 features[i, :len(chunk_samples), j] = interpolated
 
-
+        print "batch.shape, before", print batch.shape
         if not real_valued:
             batch = __batch_quantize(batch, q_levels, q_type)
 
@@ -237,16 +237,24 @@ def __music_feed_epoch(sample_data, feature_data,
                 batch
             ], axis=1).astype('float32')
 
+        print "batch.shape, after", print batch.shape
+
+        print "mask.shape before", print mask.shape
         mask = np.concatenate([
             np.full((batch_size, overlap), 1, dtype='float32'),
             mask
         ], axis=1)
+        print "mask.shape after", print mask.shape
+
+        print "features.shape before", print features.shape
 
         # cj (conditioning): not sure what this is for
         features = np.concatenate([
             np.full((batch_size, overlap), 1, dtype='float32'),
             features
         ], axis=1)
+        print "features.shape after", print features.shape
+
 
         for i in xrange(batch_seq_len // seq_len):
             reset = np.int32(i==0)
