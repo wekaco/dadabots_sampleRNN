@@ -316,7 +316,7 @@ def frame_level_rnn(input_sequences, h0, reset, features):
     if RNN_TYPE == 'GRU':
         rnns_out, last_hidden = lib.ops.stackedGRU('FrameLevel.GRU',
                                                    N_RNN,
-                                                   FRAME_SIZE,
+                                                   DIM,
                                                    DIM,
                                                    frames,
                                                    h0=h0,
