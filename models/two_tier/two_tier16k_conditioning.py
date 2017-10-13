@@ -267,6 +267,8 @@ def frame_level_rnn(input_sequences, h0, reset, features):
     features.shape:        (batch size, SEQ_LEN, N_FEATURES)
     output.shape:          (batch size, n frames * FRAME_SIZE, DIM)
     """
+    N_FEATURES = features.shape[2]
+    
     print "SEQ_LEN: ", SEQ_LEN
     print "N_FEATURES: ", N_FEATURES
     print "features.shape: ", features.shape
@@ -286,7 +288,7 @@ def frame_level_rnn(input_sequences, h0, reset, features):
     # Fuse previous frame and the current local conditioning features
     rnn_inp = lib.ops.Linear(
         'BigFrameLevel.rnn_inp_fusion',
-        [BIG_FRAME_SIZE, N_FEATURES],
+        [FRAME_SIZE, N_FEATURES],
         BIG_DIM,
         [frames, features],
         initialization='he',

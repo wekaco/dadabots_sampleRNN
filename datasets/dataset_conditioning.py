@@ -170,7 +170,7 @@ def __music_feed_epoch(sample_data, feature_data,
 
         # batch_seq_len = length of longest sequence in the batch, rounded up to
         # the nearest SEQ_LEN.
-        batch_seq_len = len(bch[0])  # should be 8*16000
+        batch_seq_len = len(bch[0][0])  # should be 8*16000
         batch_seq_len = __round_to(batch_seq_len, seq_len)
 
         batch = np.zeros(
@@ -183,17 +183,19 @@ def __music_feed_epoch(sample_data, feature_data,
 
         mask = np.ones(batch.shape, dtype='float32')
 
-        for i, data in enumerate(bch):
-            # cj (conditioning): data[0] is the sound, data[1] is features
-            # make sure to save the npy files like this in new_experiment
-            features[i, :len(data[1])] = data[1]
-
+        for i, data in enumerate(bch):           
+            # samples are in data[0]
             #data, fs, enc = scikits.audiolab.flacread(path)
             # data is float16 from reading the npy file
             batch[i, :len(data[0])] = data[0]
             # This shouldn't change anything. All the flac files for Music
             # are the same length and the mask should be 1 every where.
             # mask[i, len(data):] = np.float32(0)
+
+            # feature matrix is in data[1]
+            features[i, :len(data[1])] = data[1]
+            ## now is the time to upsample
+            
 
         if not real_valued:
             batch = __batch_quantize(batch, q_levels, q_type)
