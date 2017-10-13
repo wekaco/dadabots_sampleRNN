@@ -22,5 +22,5 @@ def build_onset_envelope_feature(filename):
 	num_frames = len(onset_env)
 	feature_matrix = np.ones((num_frames,1),dtype='float32')
 	feature_matrix[:,0] = onset_env
-	return features
+	return feature_matrix
 
