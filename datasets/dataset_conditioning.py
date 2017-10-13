@@ -133,6 +133,12 @@ def __fixed_shuffle(inp_list):
 
 def __make_random_batches(sample_data, feature_data, batch_size):
     batches = []
+    print "sample_data.shape", sample_data.shape
+    print "feature_data.shape", feature_data.shape
+    print "len(sample_data)", len(sample_data)
+    print "batch_size", batch_size
+    print len(sample_data) / batch_size
+    
     for i in xrange(len(sample_data) / batch_size):
         sample_batch = sample_data[i*batch_size:(i+1)*batch_size]
         feature_batch = feature_data[i*batch_size:(i+1)*batch_size]
