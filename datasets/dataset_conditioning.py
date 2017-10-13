@@ -7,6 +7,9 @@ import random, time, os, glob
 def __getFile(dataset_name):
     return 'music/'+dataset_name+'/music_{}.npy'
 
+def __getFeatures(dataset_name):
+    return 'music/'+dataset_name+'/features_{}.npy'
+
 __base = [
     ('Local', 'datasets/')
 ]
@@ -128,17 +131,19 @@ def __fixed_shuffle(inp_list):
     # destructive operations; in place; no need to return
     raise ValueError("inp_list is neither a list nor a np.ndarray but a "+type(inp_list))
 
-def __make_random_batches(inp_list, batch_size):
+def __make_random_batches(sample_data, feature_data, batch_size):
     batches = []
-    for i in xrange(len(inp_list) / batch_size):
-        batches.append(inp_list[i*batch_size:(i+1)*batch_size])
+    for i in xrange(len(sample_data) / batch_size):
+        sample_batch = sample_data[i*batch_size:(i+1)*batch_size]
+        feature_batch = feature_data[i*batch_size:(i+1)*batch_size]
+        batches.append([sample_batch, feature_batch])
 
     __fixed_shuffle(batches)
     return batches
 
 
 ### MUSIC DATASET LOADER ###
-def __music_feed_epoch(files,
+def __music_feed_epoch(sample_data, feature_data,
                        batch_size,
                        seq_len,
                        overlap,
@@ -158,7 +163,7 @@ def __music_feed_epoch(files,
     subbatch.shape: (BATCH_SIZE, SEQ_LEN + OVERLAP)
     reset: True or False
     """
-    batches = __make_random_batches(files, batch_size)
+    batches = __make_random_batches(sample_data, feature_data, batch_size)
 
     for bch in batches:
 
@@ -248,8 +253,13 @@ def music_train_feed_epoch(d_name, *args):
     find_dataset(__test(__getFile(d_name)))
     # Load train set
     data_path = find_dataset(__train(__getFile(d_name)))
-    files = np.load(data_path)
-    generator = __music_feed_epoch(files, *args)
+    sample_data = np.load(data_path)
+
+    # get local conditioning features
+    data_path = find_dataset(__train(__getFeatures(d_name)))
+    feature_data = np.load(data_path)
+
+    generator = __music_feed_epoch(sample_data, feature_data, *args)
     return generator
 
 def music_valid_feed_epoch(d_name, *args):
@@ -258,8 +268,12 @@ def music_valid_feed_epoch(d_name, *args):
         music_train_feed_epoch
     """
     data_path = find_dataset(__valid(__getFile(d_name)))
-    files = np.load(data_path)
-    generator = __music_feed_epoch(files, *args)
+    sample_data = np.load(data_path)
+    # get local conditioning features
+    data_path = find_dataset(__train(__getFeatures(d_name)))
+    feature_data = np.load(data_path)
+
+    generator = __music_feed_epoch(sample_data, feature_data, *args)
     return generator
 
 def music_test_feed_epoch(d_name, *args):
@@ -268,6 +282,10 @@ def music_test_feed_epoch(d_name, *args):
         music_train_feed_epoch
     """
     data_path = find_dataset(__test(__getFile(d_name)))
-    files = np.load(data_path)
-    generator = __music_feed_epoch(files, *args)
+    sample_data = np.load(data_path)
+    # get local conditioning features
+    data_path = find_dataset(__train(__getFeatures(d_name)))
+    feature_data = np.load(data_path)
+
+    generator = __music_feed_epoch(sample_data, feature_data, *args)
     return generator

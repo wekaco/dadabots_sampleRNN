@@ -76,15 +76,15 @@ for i in xrange(0, num_chunks):
     end_frame = start_frame + frames_per_chunk
     if(len(features)<=end_frame): 
         end_frame = len(features)-1
-    print "start_frame", start_frame
-    print "end_frame", end_frame
-    print "features[start:end].shape", features[start_frame:end_frame].shape
-    print "len(features)", len(features)
-    print "time", time 
-    print "frames_per_chunk", frames_per_chunk
-    print "frame_rate", frame_rate
-    print "total_num_frames", total_num_frames
-    print "num_features", num_features
+    # print "start_frame", start_frame
+    # print "end_frame", end_frame
+    # print "features[start:end].shape", features[start_frame:end_frame].shape
+    # print "len(features)", len(features)
+    # print "time", time 
+    # print "frames_per_chunk", frames_per_chunk
+    # print "frame_rate", frame_rate
+    # print "total_num_frames", total_num_frames
+    # print "num_features", num_features
     feature_matrix[i] = features[start_frame:end_frame]
 
     os.system('ffmpeg -ss {} -t 8 -i {}/preprocess_all_audio.wav -ac 1 -ab 16k -ar 16000 {}/p{}.flac'.format(time, OUTPUT_DIR, OUTPUT_DIR, i))
@@ -127,20 +127,22 @@ __fixed_shuffle(paths)
 samples = np.array([(scikits.audiolab.flacread(p)[0]).astype('float16') for p in paths])
 print samples.shape
 
-features = np.array(feature_matrix)
-print features.shape 
-
-np_arr = np.vstack((samples, features))
+print feature_matrix.shape 
 
 
 # 88/6/6 split
-length = len(np_arr)
+length = samples.shape[0]
 train_size = int(np.floor(length * .88)) # train
 test_size = int(np.floor(length * .06)) # test
 
-np.save(os.path.join(DATASET_DIR,'all_music.npy'), np_arr)
-np.save(os.path.join(DATASET_DIR,'music_train.npy'), np_arr[:train_size])
-np.save(os.path.join(DATASET_DIR,'music_valid.npy'), np_arr[train_size:train_size + test_size])
-np.save(os.path.join(DATASET_DIR,'music_test.npy'), np_arr[train_size + test_size:])
+np.save(os.path.join(DATASET_DIR,'all_music.npy'), samples)
+np.save(os.path.join(DATASET_DIR,'music_train.npy'), samples[:train_size])
+np.save(os.path.join(DATASET_DIR,'music_valid.npy'), samples[train_size:train_size + test_size])
+np.save(os.path.join(DATASET_DIR,'music_test.npy'), samples[train_size + test_size:])
+
+np.save(os.path.join(DATASET_DIR,'all_features.npy'), feature_matrix)
+np.save(os.path.join(DATASET_DIR,'features_train.npy'), feature_matrix[:train_size])
+np.save(os.path.join(DATASET_DIR,'features_valid.npy'), feature_matrix[train_size:train_size + test_size])
+np.save(os.path.join(DATASET_DIR,'features_test.npy'), feature_matrix[train_size + test_size:])
 
 #pass dataset name through two_tier.py || three_tier.py to datasets.py
