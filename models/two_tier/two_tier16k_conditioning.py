@@ -278,6 +278,9 @@ def frame_level_rnn(input_sequences, h0, reset, features):
         FRAME_SIZE
     ))
 
+    """
+    # calculate the mean features over the whole frame
+
     features = features.reshape((
         features.shape[0],
         features.shape[1] // FRAME_SIZE,
@@ -286,19 +289,19 @@ def frame_level_rnn(input_sequences, h0, reset, features):
     ))
     feature_size = N_FEATURES
 
-    """
+    print "features.shape1", features.shape
+    features = features.mean(axis=2).reshape((features.shape[0], features.shape[1], features.shape[3]))
+    print "features.shape2", features.shape
+    #"""
+
+    # have a feature for each sample
     features = features.reshape((
         features.shape[0],
         features.shape[1] // FRAME_SIZE,
         FRAME_SIZE * features.shape[2]
     ))
     feature_size = FRAME_SIZE * N_FEATURES
-    """
 
-    print "features.shape1", features.shape
-    # calculate the mean features over the whole frame
-    features = features.mean(axis=2).reshape((features.shape[0], features.shape[1], features.shape[3]))
-    print "features.shape2", features.shape
 
     print "FRAME_SIZE", FRAME_SIZE
     print "N_FEATURES", N_FEATURES
