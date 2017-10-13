@@ -1,0 +1,129 @@
+import numpy as np
+import sys, os, subprocess, scikits.audiolab, random, time, glob
+
+from build_features import build_features 
+
+PWD = os.getcwd()
+print 'PWD is', PWD
+#store dataset name
+DATASET_NAME = str(sys.argv[1])
+DOWNLOAD_DIR = str(sys.argv[2])
+print 'dl_dir is set to', DOWNLOAD_DIR
+#create the 
+print "creating directory for", DATASET_NAME
+DATASET_DIR = os.path.join(PWD, DATASET_NAME)
+os.makedirs(DATASET_DIR)
+#move samples from directory to use dataset name
+print "moving samples"
+types = {'wav', "mp3"}
+for t in types:
+    os.system('mv {}/*.{} {}/'.format(DOWNLOAD_DIR, t, DATASET_DIR))
+#run proprocess
+print "preprocessing"
+OUTPUT_DIR=os.path.join(DATASET_DIR, "parts")
+os.makedirs(OUTPUT_DIR)
+# Step 1: write all filenames to a list
+with open(os.path.join(DATASET_DIR, 'preprocess_file_list.txt'), 'w') as f:
+    for dirpath, dirnames, filenames in os.walk(DATASET_DIR):
+        for filename in filenames:
+            if filename.endswith(".wav") or filename.endswith("mp3"):
+                f.write("file '" + dirpath + '/'+ filename + "'\n")
+
+# Step 2: concatenate everything into one massive wav file
+print "concatenate all files"
+os.system('pwd')
+os.system("ffmpeg -f concat -safe 0 -i {}/preprocess_file_list.txt {}/preprocess_all_audio.wav".format(DATASET_DIR, OUTPUT_DIR))
+audio = "preprocess_all_audio.wav"
+print "get length"
+# # get the length of the resulting file
+length = float(subprocess.check_output('ffprobe -i {}/{} -show_entries format=duration -v quiet -of csv="p=0"'.format(OUTPUT_DIR, audio), shell=True))
+print length, "DURATION"
+print "print big file into chunks"
+# # Step 3: split the big file into 8-second chunks
+# overlapping 3 times per 8 seconds
+'''
+for i in xrange(int((length//8)*3)-1):
+    time = (i * 8 )/ 3
+    os.system('ffmpeg -ss {} -t 8 -i {}/preprocess_all_audio.wav -ac 1 -ab 16k -ar 16000 {}/p{}.flac'.format(time, OUTPUT_DIR, OUTPUT_DIR, i))
+'''
+
+# cj (conditioning) generate the feature matrix for the entire dataset WAV
+features = build_features("{}/preprocess_all_audio.wav".format(OUTPUT_DIR))
+# frame_rate is the number of feature frames per second
+# calcualte it by comparing length of features to length of audio 
+# don't confuse feature_frames for the SampleRNN frames
+frame_rate = len(features)/float(length)
+# a matrix of num_frames x num_features
+feature_matrix = []
+
+# size in seconds of each chunk
+size = 8
+# number of chunks
+num = 3200
+
+
+for i in xrange(0, num):
+    time = i * ((length-size)/float(num))
+
+    # build the feature_matrix
+    # it's the feature timesliced according to the start and end times of the chunk
+    start_frame = floor((time)*frame_rate)
+    end_frame = floor((time+size)*frame_rate)
+    if(len(features)>=end_frame): 
+        end_frame = len(features)-1
+    subfeatures = features[start_frame:end_frame]
+    feature_matrix.append(subfeatures)
+
+    os.system('ffmpeg -ss {} -t {} -i {}/preprocess_all_audio.wav -ac 1 -ab 16k -ar 16000 {}/p{}.flac'.format(time, size, OUTPUT_DIR, OUTPUT_DIR, i))
+print "clean up"
+
+
+
+# # Step 4: clean up temp files
+os.system('rm {}/preprocess_all_audio.wav'.format(OUTPUT_DIR))
+os.system('rm {}/preprocess_file_list.txt'.format(DATASET_DIR))
+print 'save as .npy'
+__RAND_SEED = 123
+def __fixed_shuffle(inp_list):
+    if isinstance(inp_list, list):
+        random.seed(__RAND_SEED)
+        random.shuffle(inp_list)
+        return
+    #import collections
+    #if isinstance(inp_list, (collections.Sequence)):
+    if isinstance(inp_list, numpy.ndarray):
+        numpy.random.seed(__RAND_SEED)
+        numpy.random.shuffle(inp_list)
+        return
+    # destructive operations; in place; no need to return
+    raise ValueError("inp_list is neither a list nor a numpy.ndarray but a "+type(inp_list))
+
+paths = sorted(glob.glob(OUTPUT_DIR+"/*.flac"))
+__fixed_shuffle(paths)
+
+
+
+
+
+# CJ (conditioning)
+# For conditioning, the np_arr should be structured as follows
+# np_arr[0] are the PCM samples as usual
+# np_arr[1] are the feature vectors 
+
+arr = []
+# Turn the FLACs into PCM samples
+arr[0] = [(scikits.audiolab.flacread(p)[0]).astype('float16') for p in paths]
+arr[1] = feature_matrix
+
+np_arr = np.array(arr)
+# 88/6/6 split
+length = len(np_arr)
+train_size = int(np.floor(length * .88)) # train
+test_size = int(np.floor(length * .06)) # test
+
+np.save(os.path.join(DATASET_DIR,'all_music.npy'), np_arr)
+np.save(os.path.join(DATASET_DIR,'music_train.npy'), np_arr[:train_size])
+np.save(os.path.join(DATASET_DIR,'music_valid.npy'), np_arr[train_size:train_size + test_size])
+np.save(os.path.join(DATASET_DIR,'music_test.npy'), np_arr[train_size + test_size:])
+
+#pass dataset name through two_tier.py || three_tier.py to datasets.py
