@@ -599,7 +599,7 @@ def generate_and_save_samples(tag):
     samples[:, :FRAME_SIZE] = Q_ZERO
 
     current_features = numpy.zeros((N_SEQS, LENGTH, N_FEATURES), dtype='float32')
-
+    current_features[:] = FFFG
 
     # First half zero, others fixed random at each checkpoint
     h0 = numpy.zeros(
@@ -612,7 +612,6 @@ def generate_and_save_samples(tag):
     for t in xrange(FRAME_SIZE, LENGTH):
 
         if t % FRAME_SIZE == 0:
-            current_features[:, t] = FFFG[t, :]
             #current_features = current_features[:, None, :]
 
             frame_level_outputs, h0 = frame_level_generate_fn(
@@ -620,7 +619,7 @@ def generate_and_save_samples(tag):
                 h0,
                 #numpy.full((N_SEQS, ), (t == FRAME_SIZE), dtype='int32'),
                 numpy.int32(t == FRAME_SIZE),
-                current_features
+                current_features[:, t-FRAME_SIZE:t]
             )
 
         samples[:, t] = sample_level_generate_fn(
@@ -746,6 +745,7 @@ while True:
         (TRAIN_MODE=='time-iters' and total_time-last_print_time >= PRINT_TIME) or \
         (TRAIN_MODE=='iters-time' and total_iters-last_print_iters >= PRINT_ITERS) or \
         end_of_batch:
+        """
         # 0. Validation
         print "\nValidation!",
         valid_cost, valid_time = monitor(valid_feeder)
@@ -820,7 +820,7 @@ while True:
         y_axis_strs = [train_nll_str, valid_nll_str, test_nll_str]
         lib.plot_traing_info(iter_str, y_axis_strs, FOLDER_PREFIX)
         print "And plotted!"
-
+        """
         # 5. Generate and save samples (time consuming)
         # If not successful, we still have the params to sample afterward
         print "Sampling!",
