@@ -746,12 +746,12 @@ while True:
     costs.append(cost)
 
     # Monitoring step
-    if (True or TRAIN_MODE=='iters' and total_iters-last_print_iters == PRINT_ITERS) or \
+    if (TRAIN_MODE=='iters' and total_iters-last_print_iters == PRINT_ITERS) or \
         (TRAIN_MODE=='time' and total_time-last_print_time >= PRINT_TIME) or \
         (TRAIN_MODE=='time-iters' and total_time-last_print_time >= PRINT_TIME) or \
         (TRAIN_MODE=='iters-time' and total_iters-last_print_iters >= PRINT_ITERS) or \
         end_of_batch:
-        """
+        #"""
         # 0. Validation
         print "\nValidation!",
         valid_cost, valid_time = monitor(valid_feeder)
@@ -826,7 +826,7 @@ while True:
         y_axis_strs = [train_nll_str, valid_nll_str, test_nll_str]
         lib.plot_traing_info(iter_str, y_axis_strs, FOLDER_PREFIX)
         print "And plotted!"
-        """
+        #"""
         # 5. Generate and save samples (time consuming)
         # If not successful, we still have the params to sample afterward
         print "Sampling!",
