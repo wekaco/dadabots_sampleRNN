@@ -599,7 +599,10 @@ def generate_and_save_samples(tag):
     samples[:, :FRAME_SIZE] = Q_ZERO
 
     current_features = numpy.zeros((N_SEQS, LENGTH, N_FEATURES), dtype='float32')
-    current_features[:] = FFFG
+    current_features[:, :FRAME_SIZE] = FFFG
+
+    print "samples.shape", samples.shape
+    print "current_features.shape", current_features.shape
 
     # First half zero, others fixed random at each checkpoint
     h0 = numpy.zeros(
