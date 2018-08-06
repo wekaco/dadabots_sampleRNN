@@ -1,9 +1,17 @@
-# SampleRNN (ZVK fork)
+# SampleRNN (Dadabots fork)
 
-Code accompanying the paper [SampleRNN: An Unconditional End-to-End Neural Audio Generation Model](https://openreview.net/forum?id=SkxKPDv5xl). Samples are available [here](https://soundcloud.com/samplernn/sets).
+Code accompanying the NIPS 2017 paper [Generating Black Metal and Math Rock: Beyond
+Bach, Beethoven, and Beatles](http://dadabots.com/nips2017/generating-black-metal-and-math-rock.pdf) and MUME 2018 paper ["Generating Albums with SampleRNN to Imitate Metal, Rock, and Punk Bands"](http://musicalmetacreation.org/buddydrive/file/carr/)
 
-## Features of the ZVK fork:
+Dadabots is CJ Carr [[github]](https://github.com/Cortexelus) [[website]](http://cortexel.us) and Zack Zukowski [[github]](https://github.com/ZVK) [[website]](http://zackzukowski.com/) 
 
+Original SampleRNN paper [SampleRNN: An Unconditional End-to-End Neural Audio Generation Model](https://openreview.net/forum?id=SkxKPDv5xl). 
+
+
+## Features of the Dadabots fork:
+
+- Local conditioning 
+- Remove bad amplitude normalization (see issue) 
 - auto-preprocessing (audio conversion, concatenation, chunking, and saving .npy files)
 - generate scripts for trained datasets
 - scripts for different sample rates are available (16k, 32k)
@@ -146,6 +154,12 @@ $ THEANO_FLAGS=mode=FAST_RUN,device=gpu0,floatX=float32 python -u models/two_tie
 ```
 
 ## Reference
-If you are using this code, please cite the paper.
+If you are using this code, please cite the original paper.
 
-SampleRNN: An Unconditional End-to-End Neural Audio Generation Model. Soroush Mehri, Kundan Kumar, Ishaan Gulrajani, Rithesh Kumar, Shubham Jain, Jose Sotelo, Aaron Courville, Yoshua Bengio, 5th International Conference on Learning Representations (ICLR 2017), submitted and under review.
+SampleRNN: An Unconditional End-to-End Neural Audio Generation Model. Soroush Mehri, Kundan Kumar, Ishaan Gulrajani, Rithesh Kumar, Shubham Jain, Jose Sotelo, Aaron Courville, Yoshua Bengio, 5th International Conference on Learning Representations (ICLR 2017).
+
+And both/either of our papers: 
+
+Generating Albums with SampleRNN to Imitate Metal, Rock, and Punk Bands. CJ Carr, Zack Zukowski (MUME 2018).
+
+Generating Black Metal and Math Rock: Beyond Bach, Beethoven, and Beatles. Zack Zukowski, CJ Carr (NIPS 2017).
