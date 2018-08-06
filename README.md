@@ -1,7 +1,7 @@
 # Generating Metal, Rock, Punk
 
 Code accompanying the NIPS 2017 paper [Generating Black Metal and Math Rock: Beyond
-Bach, Beethoven, and Beatles](http://dadabots.com/nips2017/generating-black-metal-and-math-rock.pdf) and MUME 2018 paper ["Generating Albums with SampleRNN to Imitate Metal, Rock, and Punk Bands"](http://musicalmetacreation.org/buddydrive/file/carr/)
+Bach, Beethoven, and Beatles](http://dadabots.com/nips2017/generating-black-metal-and-math-rock.pdf) and MUME 2018 paper [Generating Albums with SampleRNN to Imitate Metal, Rock, and Punk Bands](http://musicalmetacreation.org/buddydrive/file/carr/)
 
 We modified a SampleRNN architecture to generate music in modern genres such as black metal, math rock, skate punk, beatbox, etc
 
