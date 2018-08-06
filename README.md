@@ -50,9 +50,9 @@ But we get much faster code using the next generation of GPU architecture with:
 
 ## Setup
 
-A detailed description of how we setup this code on Ubuntu 16.04 with NVIDIA 100 GPU can be fond here. 
+A detailed description of how we setup this code on Ubuntu 16.04 with NVIDIA 100 GPU can be found here. 
 
-[SETUP INSTRUCTIONS]()
+[DETAILED SETUP INSTRUCTIONS](https://github.com/Cortexelus/dadabots_sampleRNN/wiki/Installing-Dadabots-SampleRNN-on-Ubuntu)
 
 
 
