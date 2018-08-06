@@ -220,7 +220,7 @@ This will generate from the latest checkpoint. However, we found the latest chec
 
 ## Creative Workflow
 
-At this point, we suggest human curation. Listen through the generated audio, find the best parts, and use them in your music. Read our MUME 2018 paper to see how our workflow changed over the course of six albums. 
+At this point, we suggest human curation. Listen through the generated audio, find the best parts, and use them in your music. Read our [MUME 2018 paper](http://musicalmetacreation.org/buddydrive/file/carr/) to see how our workflow changed over the course of six albums. 
 
 
 ## Reference
