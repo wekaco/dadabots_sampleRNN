@@ -1,5 +1,5 @@
-# Dadabots
-## Generating Metal, Rock, Punk
+# Dadabots SampleRNN 
+## Generating Metal, Rock, Punk, Beatbox
 
 Code accompanying the NIPS 2017 paper [Generating Black Metal and Math Rock: Beyond
 Bach, Beethoven, and Beatles](http://dadabots.com/nips2017/generating-black-metal-and-math-rock.pdf) and MUME 2018 paper [Generating Albums with SampleRNN to Imitate Metal, Rock, and Punk Bands](http://musicalmetacreation.org/buddydrive/file/carr/)
@@ -76,12 +76,12 @@ sudo python new_experiment32k.py krallice downloads/
 ```
 
 ## Training
-To train a model on an existing dataset with accelerated GPU processing, you need to run following lines from the root of `sampleRNN_ICLR2017` folder which corresponds to the best found set of hyper-paramters.
+To train a model on an existing dataset with accelerated GPU processing, you need to run following lines from the root of `dadabots_sampleRNN` folder which corresponds to the best found set of hyper-paramters.
 
 Mission control center:
 ```
 $ pwd
-/root/cj/sampleRNN_ICLR2017
+/root/cj/https://github.com/Cortexelus/dadabots_sampleRNN
 ```
 
 ### Training SampleRNN (2-tier)
