@@ -149,8 +149,8 @@ GRAD_CLIP = 1 # Elementwise grad clip threshold
 BITRATE = 16000
 
 # Other constants
-#TRAIN_MODE = 'iters' # To use PRINT_ITERS and STOP_ITERS
-TRAIN_MODE = 'time' # To use PRINT_TIME and STOP_TIME
+TRAIN_MODE = 'iters' # To use PRINT_ITERS and STOP_ITERS
+#TRAIN_MODE = 'time' # To use PRINT_TIME and STOP_TIME
 #TRAIN_MODE = 'time-iters'
 # To use PRINT_TIME for validation,
 # and (STOP_ITERS, STOP_TIME), whichever happened first, for stopping exp.
@@ -160,9 +160,9 @@ TRAIN_MODE = 'time' # To use PRINT_TIME and STOP_TIME
 PRINT_ITERS = 10000 # Print cost, generate samples, save model checkpoint every N iterations.
 STOP_ITERS = 100000 # Stop after this many iterations
 # TODO:
-PRINT_TIME = 90*60 # Print cost, generate samples, save model checkpoint every N seconds.
+PRINT_TIME = 120*60 # Print cost, generate samples, save model checkpoint every N seconds.
 STOP_TIME = 60*60*24*3 # Stop after this many seconds of actual training (not including time req'd to generate samples etc.)
-N_SEQS = 10  # Number of samples to generate every time monitoring.
+N_SEQS = 5 # Number of samples to generate every time monitoring.
 # TODO:
 RESULTS_DIR = 'results_2t'
 FOLDER_PREFIX = os.path.join(RESULTS_DIR, tag)
@@ -478,7 +478,7 @@ def generate_and_save_samples(tag):
 
     total_time = time()
     # Generate N_SEQS' sample files, each 5 seconds long
-    N_SECS = 15
+    N_SECS = 60
     LENGTH = N_SECS*BITRATE if not args.debug else 100
 
     samples = numpy.zeros((N_SEQS, LENGTH), dtype='int32')
@@ -609,7 +609,7 @@ while True:
         print "[Another epoch]",
 
     seqs, reset, mask = mini_batch
-    print "seqs.shape", seqs.shape
+    #print "seqs.shape", seqs.shape
 
     start_time = time()
     cost, h0 = train_fn(seqs, h0, reset, mask)

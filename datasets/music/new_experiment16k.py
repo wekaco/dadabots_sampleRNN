@@ -44,8 +44,8 @@ for i in xrange(int((length//8)*3)-1):
     time = (i * 8 )/ 3
     os.system('ffmpeg -ss {} -t 8 -i {}/preprocess_all_audio.wav -ac 1 -ab 16k -ar 16000 {}/p{}.flac'.format(time, OUTPUT_DIR, OUTPUT_DIR, i))
 '''
-size = 8
-num = 3200
+size = 12
+num = 6400
 for i in xrange(0, num):
     time = i * ((length-size)/float(num))
     os.system('ffmpeg -ss {} -t 8 -i {}/preprocess_all_audio.wav -ac 1 -ab 16k -ar 16000 {}/p{}.flac'.format(time, OUTPUT_DIR, OUTPUT_DIR, i))

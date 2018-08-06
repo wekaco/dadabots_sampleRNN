@@ -107,7 +107,7 @@ def get_args():
     parser.add_argument('--which_set', help='the directory name of the dataset' ,
             type=str, required=True)
     parser.add_argument('--batch_size', help='size of mini-batch',
-            type=check_positive, choices=xrange(0, 129), required=True)
+            type=check_positive, choices=xrange(0, 999), required=True)
 
     parser.add_argument('--debug', help='Debug mode', required=False, default=False, action='store_true')
     # NEW

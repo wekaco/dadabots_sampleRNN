@@ -101,14 +101,14 @@ def __batch_quantize(data, q_levels, q_type):
     One of 'linear', 'a-law', 'mu-law' for q_type.
     """
     data = data.astype('float64')
-    data = __normalize(data)
+    #data = __normalize(data)
     if q_type == 'linear':
         return __linear_quantize(data, q_levels)
     if q_type == 'a-law':
         return __a_law_quantize(data)
     if q_type == 'mu-law':
         # from [0, 1] to [-1, 1]
-        data = 2.*data-1.
+        #data = 2.*data-1.
         # Automatically quantized to 256 bins.
         return __mu_law_quantize(data)
     raise NotImplementedError
