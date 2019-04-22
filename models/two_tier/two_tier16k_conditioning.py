@@ -213,7 +213,7 @@ from datasets.dataset_conditioning import music_test_feed_epoch  as test_feeder
 
 # Number of conditioned features
 # This number will actually be updated automatically when the feature npy file is loaded
-N_FEATURES = 1
+N_FEATURES = 16
 """
 # This is the feature matrix which is used during training (it should line up with the audio)
 TRAINING_FEATURES = []
@@ -735,13 +735,13 @@ while True:
         print "[Another epoch]",
 
     seqs, reset, mask, feats = mini_batch
-    print "seqs.shape", seqs.shape
-    print "feats.shape", feats.shape
+    #print "seqs.shape", seqs.shape
+    #print "feats.shape", feats.shape
 
     start_time = time()
     cost, h0 = train_fn(seqs, h0, reset, mask, feats)
     total_time += time() - start_time
-    print "This cost:", cost, "This h0.mean()", h0.mean()
+    #print "This cost:", cost, "This h0.mean()", h0.mean()
 
     costs.append(cost)
 

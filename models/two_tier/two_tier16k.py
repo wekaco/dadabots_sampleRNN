@@ -391,6 +391,9 @@ sample_level_outputs = sample_level_predictor(
     prev_samples,
 )
 
+theano.printing.pydotprint(sample_level_outputs, outfile="sampleRNN-pydotprint.png", var_with_name_simple=True)  
+
+
 cost = T.nnet.categorical_crossentropy(
     T.nnet.softmax(sample_level_outputs),
     target_sequences.flatten()
