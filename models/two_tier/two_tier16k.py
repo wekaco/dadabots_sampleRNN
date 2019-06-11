@@ -158,10 +158,10 @@ TRAIN_MODE = 'iters' # To use PRINT_ITERS and STOP_ITERS
 # To use PRINT_ITERS for validation,
 # and (STOP_ITERS, STOP_TIME), whichever happened first, for stopping exp.
 PRINT_ITERS = 10000 # Print cost, generate samples, save model checkpoint every N iterations.
-STOP_ITERS = 100000 # Stop after this many iterations
+STOP_ITERS = 10000000 # Stop after this many iterations
 # TODO:
 PRINT_TIME = 120*60 # Print cost, generate samples, save model checkpoint every N seconds.
-STOP_TIME = 60*60*24*3 # Stop after this many seconds of actual training (not including time req'd to generate samples etc.)
+STOP_TIME = 60*60*24*30 # Stop after this many seconds of actual training (not including time req'd to generate samples etc.)
 N_SEQS = 30 # Number of samples to generate every time monitoring.
 # TODO:
 RESULTS_DIR = 'results_2t'
@@ -390,6 +390,9 @@ sample_level_outputs = sample_level_predictor(
     frame_level_outputs.reshape((BATCH_SIZE * SEQ_LEN, DIM)),
     prev_samples,
 )
+
+theano.printing.pydotprint(sample_level_outputs, outfile="sampleRNN-pydotprint.png", var_with_name_simple=True)  
+
 
 cost = T.nnet.categorical_crossentropy(
     T.nnet.softmax(sample_level_outputs),

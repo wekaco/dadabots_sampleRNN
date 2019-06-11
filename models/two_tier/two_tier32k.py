@@ -149,8 +149,8 @@ GRAD_CLIP = 1 # Elementwise grad clip threshold
 BITRATE = 32000
 
 # Other constants
-#TRAIN_MODE = 'iters' # To use PRINT_ITERS and STOP_ITERS
-TRAIN_MODE = 'time' # To use PRINT_TIME and STOP_TIME
+TRAIN_MODE = 'iters' # To use PRINT_ITERS and STOP_ITERS
+#TRAIN_MODE = 'time' # To use PRINT_TIME and STOP_TIME
 #TRAIN_MODE = 'time-iters'
 # To use PRINT_TIME for validation,
 # and (STOP_ITERS, STOP_TIME), whichever happened first, for stopping exp.
@@ -162,7 +162,7 @@ STOP_ITERS = 100000 # Stop after this many iterations
 # TODO:
 PRINT_TIME = 60*60*24*2 # Print cost, generate samples, save model checkpoint every N seconds.
 STOP_TIME = 60*60*24*4 # Stop after this many seconds of actual training (not including time req'd to generate samples etc.)
-N_SEQS = 5  # Number of samples to generate every time monitoring.
+N_SEQS = 30  # Number of samples to generate every time monitoring.
 # TODO:
 RESULTS_DIR = 'results_2t'
 FOLDER_PREFIX = os.path.join(RESULTS_DIR, tag)
