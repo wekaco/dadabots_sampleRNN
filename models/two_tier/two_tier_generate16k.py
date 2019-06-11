@@ -118,7 +118,8 @@ def get_args():
             type=check_positive, required=True)
     parser.add_argument('--n_seqs', help='Number wavs to generate',\
             type=check_positive, required=True)
-
+    parser.add_argument('--temp', help='Temperature',\
+            type=float, required=True)
 
     args = parser.parse_args()
 
@@ -127,6 +128,7 @@ def get_args():
     tag = reduce(lambda a, b: a+b, sys.argv).replace('--resume', '').replace('/', '-').replace('--', '-').replace('True', 'T').replace('False', 'F')
     tag = re.sub(r'-n_secs[0-9]+', "", tag)
     tag = re.sub(r'-n_seqs[0-9]+', "", tag)
+    tag = re.sub(r'-temp[0-9]*[\.]?[0-9]*', "", tag)
     tag = re.sub(r'_generate', "", tag)
     tag += '-lr'+str(LEARNING_RATE)
     print "Created experiment tag for these args:"
@@ -156,6 +158,7 @@ BATCH_SIZE = args.batch_size
 RESUME = args.resume
 N_SECS = args.n_secs
 N_SEQS = args.n_seqs  
+TEMPERATURE = args.temp
 
 
 print "hi"
@@ -473,7 +476,7 @@ sample_level_generate_fn = theano.function(
         sample_level_predictor(
             frame_level_outputs,
             prev_samples,
-        )
+        )/TEMPERATURE
     ),
     on_unused_input='warn'
 )

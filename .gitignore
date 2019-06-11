@@ -89,3 +89,6 @@ ENV/
 .ropeproject
 *.wav
 datasets/music/rev-preprocess.sh
+
+datasets/music/*/
+results_2t/*

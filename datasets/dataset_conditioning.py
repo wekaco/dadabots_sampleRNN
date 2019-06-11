@@ -243,8 +243,8 @@ def __music_feed_epoch(sample_data, feature_data,
         ], axis=1)
 
 
-        """# cj (conditioning): not sure what this is for
-        features = np.concatenate([
+        # cj (conditioning): not sure what this is for
+        """features = np.concatenate([
             np.full((batch_size, overlap, num_features), 0, dtype='float32'),
             features
         ], axis=1)"""
