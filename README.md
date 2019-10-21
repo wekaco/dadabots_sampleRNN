@@ -144,7 +144,8 @@ If you have 8 GPUs, you can run up to 8 experiments in parallel, by setting devi
 After training 100s of models with different hyperparameters, these were our best hyperparameters (at the limits of the V100 hardware) for the kind of music we wanted to generate. Further explanation for our choices can be found in our papers.
 
 
-```THEANO_FLAGS=mode=FAST_RUN,device=cuda0,floatX=float32 python -u models/two_tier/two_tier16k.py --exp krallice_experiment --n_frames 64 --frame_size 16 --emb_size 256 --skip_conn True --dim 1024 --n_rnn 5 --rnn_type LSTM --q_levels 256 --q_type mu-law --batch_size 128 --weight_norm True --learn_h0 False --which_set krallice
+```
+THEANO_FLAGS=mode=FAST_RUN,device=cuda0,floatX=float32 python -u models/two_tier/two_tier16k.py --exp krallice_experiment --n_frames 64 --frame_size 16 --emb_size 256 --skip_conn True --dim 1024 --n_rnn 5 --rnn_type LSTM --q_levels 256 --q_type mu-law --batch_size 128 --weight_norm True --learn_h0 False --which_set krallice
 ```
 
 
