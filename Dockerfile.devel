@@ -15,6 +15,16 @@ RUN apt-get update && apt-get install -y \
     libx11-6 \
  && rm -rf /var/lib/apt/lists/*
 
+# Install audio utilities
+# (not sure why install libav-tools / libavcodec-extra, ffmpeg)
+# libsndfile see https://github.com/wekaco/dadabots_sampleRNN/issues/1
+RUN apt-get update && apt-get install -y \
+    libsndfile1 \ 
+    libsndfile1-dev \
+    libav-tools \
+    libavcodec-extra \ 
+ && rm -rf /var/lib/apt/lists/*
+
 # Create a working directory
 RUN mkdir /app
 WORKDIR /app
@@ -38,7 +48,8 @@ ENV PATH=/home/user/miniconda/bin:$PATH
 ENV CONDA_AUTO_UPDATE_CONDA=false
 
 # Create a Python 3.6 environment
-RUN /home/user/miniconda/bin/conda install conda-build \
+RUN /home/user/miniconda/bin/conda update -n base -c defaults conda \
+ && /home/user/miniconda/bin/conda install conda-build \
  && /home/user/miniconda/bin/conda create -y --name py36 python=3.6.5 \
  && /home/user/miniconda/bin/conda clean -ya
 ENV CONDA_DEFAULT_ENV=py36
@@ -50,3 +61,12 @@ RUN conda install -y -c theano \
   cudatoolkit=10.0 \
   pygpu \
   && conda clean -ya
+
+# Lasagne
+COPY Lasagne_5d3c63c.zip ./
+RUN pip install --no-cache-dir --upgrade pip && \
+  pip install --no-cache-dir Lasagne_5d3c63c.zip
+
+# requirements
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
